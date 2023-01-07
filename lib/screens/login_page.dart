@@ -1,4 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:simple_store/screens/product_list_page.dart';
 
 import '../api/client_api.dart';
 import '../widget/dialog_forgot.dart';
@@ -83,10 +85,13 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void _onLoginTapped() async {
-    final loginRes =
-        await ClientApi.login(controllerUsername.text, controllerPassword.text);
-    if (loginRes) {
-    } else {}
+    final loginRes = await ClientApi.login(
+        controllerUsername.text, controllerPassword.text, context);
+    if (loginRes['success']) {
+      moveNextPage();
+    } else {
+      showSnackBar(loginRes['message']);
+    }
   }
 
   void _onRegisterTapped() {
@@ -105,5 +110,20 @@ class _LoginPageState extends State<LoginPage> {
         return const DialogForgot();
       },
     );
+  }
+
+  void moveNextPage() {
+    Navigator.of(context).pushAndRemoveUntil(
+        CupertinoPageRoute(
+          builder: (context) => const ProductListPage(),
+        ),
+        (Route<dynamic> route) => false);
+  }
+
+  void showSnackBar(String message) {
+    var snackBar = SnackBar(
+      content: Text('Login failed. $message'),
+    );
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 }

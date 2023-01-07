@@ -1,6 +1,6 @@
 # simple_store
 
-A new Flutter project.
+A new Flutter project for a simple CRUD store.
 
 ## Getting Started
 
