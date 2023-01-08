@@ -6,6 +6,7 @@ import 'package:simple_store/data/provider_product.dart';
 import 'package:simple_store/data/provider_user.dart';
 import 'package:simple_store/screens/login_page.dart';
 import 'package:simple_store/screens/profile_menu_page.dart';
+import 'package:simple_store/widget/item_product.dart';
 
 import '../models/users.dart';
 
@@ -83,11 +84,17 @@ class _ProductListPageState extends State<ProductListPage> {
             Expanded(
               child: Consumer<ProviderProduct>(
                 builder: (context, value, child) {
-                  return ListView.builder(
-                    itemBuilder: (context, index) {
-                      return Text(value.productList[index].name!);
+                  return RefreshIndicator(
+                    onRefresh: () async {
+                      _loadData();
                     },
-                    itemCount: value.productList.length,
+                    child: ListView.builder(
+                      itemBuilder: (context, index) {
+                        // return Text(value.productList[index].name!);
+                        return ItemProduct(item: value.productList[index]);
+                      },
+                      itemCount: value.productList.length,
+                    ),
                   );
                 },
               ),
