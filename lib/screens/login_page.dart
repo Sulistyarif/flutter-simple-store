@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:simple_store/screens/product_list_page.dart';
 
 import '../api/client_api.dart';
+import '../utlis/utils.dart';
 import '../widget/dialog_forgot.dart';
 import '../widget/dialog_register.dart';
 
@@ -121,9 +122,6 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void showSnackBar(String message) {
-    var snackBar = SnackBar(
-      content: Text('Login failed. $message'),
-    );
-    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+    Utils.showSnackBar(context, message);
   }
 }

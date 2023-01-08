@@ -16,4 +16,9 @@ class ProviderUser extends ChangeNotifier {
       return false;
     }
   }
+
+  void doLogout() {
+    user = null;
+    notifyListeners();
+  }
 }

@@ -30,13 +30,17 @@ class _ProfilePageState extends State<ProfilePage> {
       ),
       body: isLoaded
           ? Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Text(
                   user!.username!,
+                  textAlign: TextAlign.center,
                   style: const TextStyle(fontWeight: FontWeight.bold),
                 ),
                 Text(
                   user!.email!,
+                  textAlign: TextAlign.center,
                   style: const TextStyle(fontWeight: FontWeight.bold),
                 ),
               ],

@@ -3,7 +3,9 @@ import 'dart:developer';
 
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
+import 'package:simple_store/data/provider_category.dart';
 import 'package:simple_store/data/provider_user.dart';
+import 'package:simple_store/models/categories.dart' as categoryClass;
 import 'package:simple_store/models/users.dart' as userClass;
 
 class ClientApi {
@@ -62,5 +64,44 @@ class ClientApi {
     Map<String, dynamic> resJson = json.decode(response.body);
     log(response.body);
     return resJson['message'];
+  }
+
+  static Future<void> getCategories(context) async {
+    var response = await client.get(
+      Uri.parse('$uri/category'),
+      headers: {
+        "content-type": "application/x-www-form-urlencoded",
+      },
+    );
+    var resJson = json.decode(response.body).cast<Map<String, dynamic>>();
+    List<categoryClass.Categories> responseList = [];
+    responseList = resJson != null
+        ? resJson
+            .map<categoryClass.Categories>(
+                (json) => categoryClass.Categories.fromJson(json))
+            .toList()
+        : [];
+    Provider.of<ProviderCategory>(context, listen: false)
+        .setCategoryList(responseList);
+    log(response.body);
+  }
+
+  static Future<bool> createCategory(name) async {
+    var response = await client.post(
+      Uri.parse('$uri/category'),
+      headers: {
+        "content-type": "application/x-www-form-urlencoded",
+      },
+      body: {
+        'name': name,
+      },
+    );
+    Map<String, dynamic> resJson = json.decode(response.body);
+    log(response.body);
+    if (resJson['success']) {
+      return true;
+    } else {
+      return false;
+    }
   }
 }
