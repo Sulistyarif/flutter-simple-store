@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:simple_store/api/client_api.dart';
+import 'package:simple_store/data/provider_product.dart';
 import 'package:simple_store/data/provider_user.dart';
 import 'package:simple_store/screens/login_page.dart';
 import 'package:simple_store/screens/profile_menu_page.dart';
@@ -79,11 +81,15 @@ class _ProductListPageState extends State<ProductListPage> {
             ),
             const SizedBox(height: 10),
             Expanded(
-              child: ListView.builder(
-                itemBuilder: (context, index) {
-                  return const Text('data');
+              child: Consumer<ProviderProduct>(
+                builder: (context, value, child) {
+                  return ListView.builder(
+                    itemBuilder: (context, index) {
+                      return Text(value.productList[index].name!);
+                    },
+                    itemCount: value.productList.length,
+                  );
                 },
-                itemCount: 10,
               ),
             ),
           ],
@@ -95,5 +101,7 @@ class _ProductListPageState extends State<ProductListPage> {
   void _loadData() async {
     isLoggedIn =
         Provider.of<ProviderUser>(context, listen: false).getStatusLogin();
+    ClientApi.getAllProducts(context);
+    setState(() {});
   }
 }

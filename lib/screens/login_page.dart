@@ -43,13 +43,14 @@ class _LoginPageState extends State<LoginPage> {
               controller: controllerPassword,
               obscureText: true,
               decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10.0),
-                  ),
-                  filled: true,
-                  hintStyle: TextStyle(color: Colors.grey[800]),
-                  hintText: "Password",
-                  fillColor: Colors.white70),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
+                filled: true,
+                hintStyle: TextStyle(color: Colors.grey[800]),
+                hintText: "Password",
+                fillColor: Colors.white70,
+              ),
             ),
             const SizedBox(height: 15),
             ElevatedButton(

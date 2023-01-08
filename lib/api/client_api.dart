@@ -4,9 +4,11 @@ import 'dart:developer';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 import 'package:simple_store/data/provider_category.dart';
+import 'package:simple_store/data/provider_product.dart';
 import 'package:simple_store/data/provider_user.dart';
-import 'package:simple_store/models/categories.dart' as categoryClass;
-import 'package:simple_store/models/users.dart' as userClass;
+import 'package:simple_store/models/categories.dart' as category_class;
+import 'package:simple_store/models/products.dart' as product_class;
+import 'package:simple_store/models/users.dart' as user_class;
 
 class ClientApi {
   static final Uri uri = Uri.parse('http://192.168.18.6:5004');
@@ -25,7 +27,7 @@ class ClientApi {
     );
     Map<String, dynamic> resJson = json.decode(response.body);
     Provider.of<ProviderUser>(context, listen: false)
-        .setUser(userClass.Users.fromJson(resJson['data']));
+        .setUser(user_class.Users.fromJson(resJson['data']));
     log(response.body);
     return resJson;
   }
@@ -74,11 +76,11 @@ class ClientApi {
       },
     );
     var resJson = json.decode(response.body).cast<Map<String, dynamic>>();
-    List<categoryClass.Categories> responseList = [];
+    List<category_class.Categories> responseList = [];
     responseList = resJson != null
         ? resJson
-            .map<categoryClass.Categories>(
-                (json) => categoryClass.Categories.fromJson(json))
+            .map<category_class.Categories>(
+                (json) => category_class.Categories.fromJson(json))
             .toList()
         : [];
     Provider.of<ProviderCategory>(context, listen: false)
@@ -103,5 +105,25 @@ class ClientApi {
     } else {
       return false;
     }
+  }
+
+  static Future<void> getAllProducts(context) async {
+    var response = await client.get(
+      Uri.parse('$uri/product'),
+      headers: {
+        "content-type": "application/x-www-form-urlencoded",
+      },
+    );
+    var resJson = json.decode(response.body).cast<Map<String, dynamic>>();
+    List<product_class.Products> responseList = [];
+    responseList = resJson != null
+        ? resJson
+            .map<product_class.Products>(
+                (json) => product_class.Products.fromJson(json))
+            .toList()
+        : [];
+    Provider.of<ProviderProduct>(context, listen: false)
+        .setProductList(responseList);
+    log(response.body);
   }
 }

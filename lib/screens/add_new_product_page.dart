@@ -12,6 +12,8 @@ class AddNewProductPage extends StatefulWidget {
 
 class _AddNewProductPageState extends State<AddNewProductPage> {
   TextEditingController controllerName = TextEditingController();
+  TextEditingController controllerDesc = TextEditingController();
+  TextEditingController controllerPrice = TextEditingController();
   Categories? itemCategories;
 
   @override
@@ -38,23 +40,43 @@ class _AddNewProductPageState extends State<AddNewProductPage> {
         child: ListView(
           children: [
             const Text(
-              'Product name',
+              'Name',
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 5),
             TextField(
               controller: controllerName,
+              decoration: InputDecoration(
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
+                filled: true,
+                hintStyle: const TextStyle(
+                    color: Colors.grey, fontStyle: FontStyle.italic),
+                hintText: "product name",
+                fillColor: Colors.white70,
+              ),
             ),
             const SizedBox(height: 15),
             const Text(
-              'Product descriptions',
+              'Description',
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 5),
             TextField(
-              controller: controllerName,
+              controller: controllerDesc,
               minLines: 3,
               maxLines: 7,
+              decoration: InputDecoration(
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
+                filled: true,
+                hintStyle: const TextStyle(
+                    color: Colors.grey, fontStyle: FontStyle.italic),
+                hintText: "product description",
+                fillColor: Colors.white70,
+              ),
             ),
             const SizedBox(height: 15),
             const Text(
@@ -72,12 +94,22 @@ class _AddNewProductPageState extends State<AddNewProductPage> {
             ),
             const SizedBox(height: 15),
             const Text(
-              'Product price',
+              'Price',
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 5),
             TextField(
-              controller: controllerName,
+              controller: controllerPrice,
+              decoration: InputDecoration(
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
+                filled: true,
+                hintStyle: const TextStyle(
+                    color: Colors.grey, fontStyle: FontStyle.italic),
+                hintText: "product price",
+                fillColor: Colors.white70,
+              ),
             ),
             const SizedBox(height: 15),
             const Text(
