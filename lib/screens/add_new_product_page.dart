@@ -1,10 +1,16 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:simple_store/api/client_api.dart';
+import 'package:simple_store/data/provider_user.dart';
 import 'package:simple_store/models/categories.dart';
+import 'package:simple_store/models/products.dart';
 import 'package:simple_store/screens/pick_category_page.dart';
+import 'package:simple_store/utlis/utils.dart';
 
 class AddNewProductPage extends StatefulWidget {
-  const AddNewProductPage({super.key});
+  final Function() onProductAdded;
+  const AddNewProductPage({super.key, required this.onProductAdded});
 
   @override
   State<AddNewProductPage> createState() => _AddNewProductPageState();
@@ -23,7 +29,9 @@ class _AddNewProductPageState extends State<AddNewProductPage> {
         title: const Text('Add New Product'),
         actions: [
           GestureDetector(
-            onTap: () {},
+            onTap: () {
+              _onAddImage();
+            },
             child: const Padding(
               padding: EdgeInsets.symmetric(horizontal: 15),
               child: Icon(
@@ -152,5 +160,23 @@ class _AddNewProductPageState extends State<AddNewProductPage> {
         ),
       ),
     );
+  }
+
+  void _onAddImage() async {
+    Products product = Products(
+      image: '',
+      name: controllerName.text,
+      description: controllerDesc.text,
+      categoryId: itemCategories!.id,
+      price: int.parse(controllerPrice.text),
+      sellerId: Provider.of<ProviderUser>(context, listen: false).user!.id,
+    );
+    bool isSuccess = await ClientApi.createProduct(product);
+    if (isSuccess) {
+      widget.onProductAdded();
+      Navigator.of(context).pop();
+    } else {
+      Utils.showSnackBar(context, 'Failed to create product');
+    }
   }
 }

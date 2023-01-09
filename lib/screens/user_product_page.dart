@@ -1,6 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:simple_store/api/client_api.dart';
+import 'package:simple_store/data/provider_product.dart';
+import 'package:simple_store/data/provider_user.dart';
 import 'package:simple_store/screens/add_new_product_page.dart';
+import 'package:simple_store/widget/item_product.dart';
 
 class UserProductPage extends StatefulWidget {
   const UserProductPage({super.key});
@@ -13,6 +18,12 @@ class _UserProductPageState extends State<UserProductPage> {
   TextEditingController controllerSearch = TextEditingController();
 
   @override
+  void initState() {
+    _loadData();
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -23,7 +34,11 @@ class _UserProductPageState extends State<UserProductPage> {
               Navigator.push(
                 context,
                 CupertinoPageRoute(
-                  builder: (context) => const AddNewProductPage(),
+                  builder: (context) => AddNewProductPage(
+                    onProductAdded: () {
+                      _loadData();
+                    },
+                  ),
                 ),
               );
             },
@@ -58,16 +73,31 @@ class _UserProductPageState extends State<UserProductPage> {
             ),
             const SizedBox(height: 10),
             Expanded(
-              child: ListView.builder(
-                itemBuilder: (context, index) {
-                  return const Text('data');
+              child: Consumer<ProviderProduct>(
+                builder: (context, value, child) {
+                  return RefreshIndicator(
+                    onRefresh: () async {
+                      _loadData();
+                    },
+                    child: ListView.builder(
+                      itemBuilder: (context, index) {
+                        // return const Text('data');
+                        return ItemProduct(item: value.myProductList[index]);
+                      },
+                      itemCount: value.myProductList.length,
+                    ),
+                  );
                 },
-                itemCount: 10,
               ),
             ),
           ],
         ),
       ),
     );
+  }
+
+  void _loadData() {
+    ClientApi.getMyProducts(
+        context, Provider.of<ProviderUser>(context, listen: false).user!.id);
   }
 }

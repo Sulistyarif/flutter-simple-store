@@ -19,7 +19,7 @@ class CategoryListItem extends StatelessWidget {
           child: Row(
             children: [
               const Icon(
-                Icons.shopping_basket_outlined,
+                Icons.tag_rounded,
                 size: 30,
               ),
               const SizedBox(width: 10),

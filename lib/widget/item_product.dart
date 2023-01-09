@@ -22,7 +22,7 @@ class _ItemProductState extends State<ItemProduct> {
         child: Row(
           children: [
             Image.network(
-              'https://picsum.photos/200/200',
+              'https://picsum.photos/200',
               height: 75,
               width: 75,
             ),
@@ -50,7 +50,7 @@ class _ItemProductState extends State<ItemProduct> {
                     style: const TextStyle(),
                   ),
                   Text(
-                    widget.item.seller!,
+                    widget.item.sellerId.toString(),
                     textAlign: TextAlign.end,
                     style: const TextStyle(color: Colors.blue, fontSize: 12),
                   ),

@@ -126,4 +126,49 @@ class ClientApi {
         .setProductList(responseList);
     log(response.body);
   }
+
+  static Future<bool> createProduct(product_class.Products param) async {
+    var response = await client.post(
+      Uri.parse('$uri/product'),
+      headers: {
+        "content-type": "application/x-www-form-urlencoded",
+      },
+      body: {
+        'name': param.name,
+        'description': param.description,
+        'category_id': param.categoryId.toString(),
+        'seller_id': param.sellerId.toString(),
+        'price': param.price.toString(),
+        'image': param.image,
+      },
+    );
+    Map<String, dynamic> resJson = json.decode(response.body);
+    log(response.body);
+    print(response.body);
+    if (resJson['success']) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  static Future<void> getMyProducts(context, userId) async {
+    var response = await client.get(
+      Uri.parse('$uri/product/$userId'),
+      headers: {
+        "content-type": "application/x-www-form-urlencoded",
+      },
+    );
+    var resJson = json.decode(response.body).cast<Map<String, dynamic>>();
+    List<product_class.Products> responseList = [];
+    responseList = resJson != null
+        ? resJson
+            .map<product_class.Products>(
+                (json) => product_class.Products.fromJson(json))
+            .toList()
+        : [];
+    Provider.of<ProviderProduct>(context, listen: false)
+        .setMyProductList(responseList);
+    log(response.body);
+  }
 }

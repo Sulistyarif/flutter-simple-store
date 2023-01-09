@@ -2,8 +2,8 @@ class Products {
   int? id;
   String? name;
   String? description;
-  String? category;
-  String? seller;
+  int? categoryId;
+  int? sellerId;
   int? price;
   String? image;
 
@@ -11,8 +11,8 @@ class Products {
       {this.id,
       this.name,
       this.description,
-      this.category,
-      this.seller,
+      this.categoryId,
+      this.sellerId,
       this.price,
       this.image});
 
@@ -20,8 +20,8 @@ class Products {
     id = json['id'];
     name = json['name'];
     description = json['description'];
-    category = json['category'];
-    seller = json['seller'];
+    categoryId = json['category_id'];
+    sellerId = json['seller_id'];
     price = json['price'];
     image = json['image'];
   }
@@ -31,8 +31,8 @@ class Products {
     data['id'] = this.id;
     data['name'] = this.name;
     data['description'] = this.description;
-    data['category'] = this.category;
-    data['seller'] = this.seller;
+    data['category_id'] = this.categoryId;
+    data['seller_id'] = this.sellerId;
     data['price'] = this.price;
     data['image'] = this.image;
     return data;

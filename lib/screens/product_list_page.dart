@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -6,6 +8,7 @@ import 'package:simple_store/data/provider_product.dart';
 import 'package:simple_store/data/provider_user.dart';
 import 'package:simple_store/screens/login_page.dart';
 import 'package:simple_store/screens/profile_menu_page.dart';
+import 'package:simple_store/utlis/utils.dart';
 import 'package:simple_store/widget/item_product.dart';
 
 import '../models/users.dart';
@@ -91,7 +94,12 @@ class _ProductListPageState extends State<ProductListPage> {
                     child: ListView.builder(
                       itemBuilder: (context, index) {
                         // return Text(value.productList[index].name!);
-                        return ItemProduct(item: value.productList[index]);
+                        // print(value.myProducts[index].sellerId);
+                        Random _rnd = Random();
+                        return ItemProduct(
+                          key: Key(Utils.getRandomString(6, _rnd)),
+                          item: value.productList[index],
+                        );
                       },
                       itemCount: value.productList.length,
                     ),
@@ -109,6 +117,5 @@ class _ProductListPageState extends State<ProductListPage> {
     isLoggedIn =
         Provider.of<ProviderUser>(context, listen: false).getStatusLogin();
     ClientApi.getAllProducts(context);
-    setState(() {});
   }
 }

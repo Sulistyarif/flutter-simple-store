@@ -1,6 +1,11 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 
 class Utils {
+  static const _chars =
+      'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';
+
   static void showSnackBar(context, String message) {
     var snackBar = SnackBar(
       content: Text('Login failed. $message'),
@@ -20,4 +25,8 @@ class Utils {
     }
     return result.toString();
   }
+
+  static String getRandomString(int length, rnd) =>
+      String.fromCharCodes(Iterable.generate(
+          length, (_) => _chars.codeUnitAt(rnd.nextInt(_chars.length))));
 }
