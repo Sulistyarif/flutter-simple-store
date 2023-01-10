@@ -127,24 +127,24 @@ class ClientApi {
     log(response.body);
   }
 
-  static Future<bool> createProduct(product_class.Products param) async {
+  static Future<bool> createProduct(String name, String desc, int categoryId,
+      int sellerId, String price, String image) async {
     var response = await client.post(
       Uri.parse('$uri/product'),
       headers: {
         "content-type": "application/x-www-form-urlencoded",
       },
       body: {
-        'name': param.name,
-        'description': param.description,
-        'category_id': param.categoryId.toString(),
-        'seller_id': param.sellerId.toString(),
-        'price': param.price.toString(),
-        'image': param.image,
+        'name': name,
+        'description': desc,
+        'category_id': categoryId.toString(),
+        'seller_id': sellerId.toString(),
+        'price': price.toString(),
+        'image': image,
       },
     );
     Map<String, dynamic> resJson = json.decode(response.body);
     log(response.body);
-    print(response.body);
     if (resJson['success']) {
       return true;
     } else {

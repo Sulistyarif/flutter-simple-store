@@ -171,7 +171,14 @@ class _AddNewProductPageState extends State<AddNewProductPage> {
       price: int.parse(controllerPrice.text),
       sellerId: Provider.of<ProviderUser>(context, listen: false).user!.id,
     );
-    bool isSuccess = await ClientApi.createProduct(product);
+    bool isSuccess = await ClientApi.createProduct(
+      controllerName.text,
+      controllerDesc.text,
+      itemCategories!.id!,
+      Provider.of<ProviderUser>(context, listen: false).user!.id!,
+      controllerPrice.text,
+      'image',
+    );
     if (isSuccess) {
       widget.onProductAdded();
       Navigator.of(context).pop();
