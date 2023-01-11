@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:simple_store/api/client_api.dart';
 import 'package:simple_store/data/provider_product.dart';
 import 'package:simple_store/data/provider_user.dart';
+import 'package:simple_store/models/products.dart';
 import 'package:simple_store/screens/login_page.dart';
 import 'package:simple_store/screens/profile_menu_page.dart';
 import 'package:simple_store/utlis/utils.dart';
@@ -23,6 +24,8 @@ class ProductListPage extends StatefulWidget {
 class _ProductListPageState extends State<ProductListPage> {
   TextEditingController controllerSearch = TextEditingController();
   bool isLoggedIn = false;
+  List<Products> listAllProduct = [];
+  List<Products> listFoundProduct = [];
 
   @override
   void initState() {
@@ -87,17 +90,16 @@ class _ProductListPageState extends State<ProductListPage> {
             Expanded(
               child: Consumer<ProviderProduct>(
                 builder: (context, value, child) {
+                  listAllProduct = value.productList;
                   return RefreshIndicator(
                     onRefresh: () async {
                       _loadData();
                     },
                     child: ListView.builder(
                       itemBuilder: (context, index) {
-                        // return Text(value.productList[index].name!);
-                        // print(value.myProducts[index].sellerId);
-                        Random _rnd = Random();
+                        Random rnd = Random();
                         return ItemProduct(
-                          key: Key(Utils.getRandomString(6, _rnd)),
+                          key: Key(Utils.getRandomString(6, rnd)),
                           item: value.productList[index],
                         );
                       },

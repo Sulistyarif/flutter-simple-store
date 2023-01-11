@@ -7,6 +7,7 @@ import 'package:simple_store/models/categories.dart';
 import 'package:simple_store/models/products.dart';
 import 'package:simple_store/screens/pick_category_page.dart';
 import 'package:simple_store/utlis/utils.dart';
+import 'package:simple_store/widget/dialog_yes_no.dart';
 
 class AddNewProductPage extends StatefulWidget {
   final Function() onProductAdded;
@@ -30,7 +31,7 @@ class _AddNewProductPageState extends State<AddNewProductPage> {
         actions: [
           GestureDetector(
             onTap: () {
-              _onAddImage();
+              _onProductAdd();
             },
             child: const Padding(
               padding: EdgeInsets.symmetric(horizontal: 15),
@@ -162,28 +163,30 @@ class _AddNewProductPageState extends State<AddNewProductPage> {
     );
   }
 
-  void _onAddImage() async {
-    Products product = Products(
-      image: '',
-      name: controllerName.text,
-      description: controllerDesc.text,
-      categoryId: itemCategories!.id,
-      price: int.parse(controllerPrice.text),
-      sellerId: Provider.of<ProviderUser>(context, listen: false).user!.id,
+  void _onProductAdd() async {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return DialogYesNo(
+            onYes: () async {
+              bool isSuccess = await ClientApi.createProduct(
+                controllerName.text,
+                controllerDesc.text,
+                itemCategories!.id!,
+                Provider.of<ProviderUser>(context, listen: false).user!.id!,
+                controllerPrice.text,
+                'image',
+              );
+              if (isSuccess) {
+                widget.onProductAdded();
+                Navigator.of(context).pop();
+                Navigator.of(this.context).pop();
+              } else {
+                Utils.showSnackBar(context, 'Failed to create product');
+              }
+            },
+            title: 'Are you want to add this product?');
+      },
     );
-    bool isSuccess = await ClientApi.createProduct(
-      controllerName.text,
-      controllerDesc.text,
-      itemCategories!.id!,
-      Provider.of<ProviderUser>(context, listen: false).user!.id!,
-      controllerPrice.text,
-      'image',
-    );
-    if (isSuccess) {
-      widget.onProductAdded();
-      Navigator.of(context).pop();
-    } else {
-      Utils.showSnackBar(context, 'Failed to create product');
-    }
   }
 }

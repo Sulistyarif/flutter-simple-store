@@ -81,7 +81,6 @@ class _UserProductPageState extends State<UserProductPage> {
                     },
                     child: ListView.builder(
                       itemBuilder: (context, index) {
-                        // return const Text('data');
                         return ItemProduct(item: value.myProductList[index]);
                       },
                       itemCount: value.myProductList.length,

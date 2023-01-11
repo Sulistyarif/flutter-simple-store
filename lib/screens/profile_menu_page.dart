@@ -1,12 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:provider/provider.dart';
 import 'package:simple_store/data/provider_user.dart';
 import 'package:simple_store/screens/product_list_page.dart';
 import 'package:simple_store/screens/profile_page.dart';
 import 'package:simple_store/screens/user_product_page.dart';
+import 'package:simple_store/widget/custom_rounded_button.dart';
+import 'package:simple_store/widget/dialog_yes_no.dart';
 
 class ProfileMenuPage extends StatefulWidget {
   const ProfileMenuPage({super.key});
@@ -20,7 +20,7 @@ class _ProfileMenuPageState extends State<ProfileMenuPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Profile Menu'),
+        title: const Text('Menu'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -38,7 +38,10 @@ class _ProfileMenuPageState extends State<ProfileMenuPage> {
               child: const Card(
                 child: Padding(
                   padding: EdgeInsets.all(15.0),
-                  child: Text('My Profile'),
+                  child: Text(
+                    'Profile',
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                  ),
                 ),
               ),
             ),
@@ -57,18 +60,16 @@ class _ProfileMenuPageState extends State<ProfileMenuPage> {
               child: const Card(
                 child: Padding(
                   padding: EdgeInsets.all(15.0),
-                  child: Text('My Product'),
+                  child: Text(
+                    'Product list',
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                  ),
                 ),
               ),
             ),
             GestureDetector(
               onTap: () {
-                Provider.of<ProviderUser>(context, listen: false).doLogout();
-                Navigator.of(context).pushAndRemoveUntil(
-                    CupertinoPageRoute(
-                      builder: (context) => const ProductListPage(),
-                    ),
-                    (Route<dynamic> route) => false);
+                _onLogoutTapped();
               },
               child: const Card(
                 color: Colors.red,
@@ -76,7 +77,10 @@ class _ProfileMenuPageState extends State<ProfileMenuPage> {
                   padding: EdgeInsets.all(15.0),
                   child: Text(
                     'Logout',
-                    style: TextStyle(color: Colors.white),
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20,
+                        color: Colors.white),
                   ),
                 ),
               ),
@@ -84,6 +88,24 @@ class _ProfileMenuPageState extends State<ProfileMenuPage> {
           ],
         ),
       ),
+    );
+  }
+
+  void _onLogoutTapped() {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return DialogYesNo(
+            onYes: () {
+              Provider.of<ProviderUser>(context, listen: false).doLogout();
+              Navigator.of(context).pushAndRemoveUntil(
+                  CupertinoPageRoute(
+                    builder: (context) => const ProductListPage(),
+                  ),
+                  (Route<dynamic> route) => false);
+            },
+            title: 'Are you want to logout?');
+      },
     );
   }
 }

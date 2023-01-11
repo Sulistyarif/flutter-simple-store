@@ -11,7 +11,7 @@ import 'package:simple_store/models/products.dart' as product_class;
 import 'package:simple_store/models/users.dart' as user_class;
 
 class ClientApi {
-  static final Uri uri = Uri.parse('http://192.168.18.6:5004');
+  static final Uri uri = Uri.parse('http://172.20.10.6:5004');
   static final client = http.Client();
 
   static Future<Map<String, dynamic>> login(username, password, context) async {
@@ -170,5 +170,20 @@ class ClientApi {
     Provider.of<ProviderProduct>(context, listen: false)
         .setMyProductList(responseList);
     log(response.body);
+  }
+
+  static Future<bool> deleteProduct(context, productId) async {
+    var response = await client.delete(
+      Uri.parse('$uri/product/$productId'),
+      headers: {
+        "content-type": "application/x-www-form-urlencoded",
+      },
+    );
+    var resJson = json.decode(response.body).cast<Map<String, dynamic>>();
+    if (resJson['success']) {
+      return true;
+    } else {
+      return false;
+    }
   }
 }

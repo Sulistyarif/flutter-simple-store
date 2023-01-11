@@ -27,6 +27,12 @@ class _LoginPageState extends State<LoginPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
+            const Text(
+              'Login Page',
+              textAlign: TextAlign.center,
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
+            ),
+            const SizedBox(height: 15),
             TextField(
               controller: controllerUsername,
               decoration: InputDecoration(
@@ -87,6 +93,26 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void _onLoginTapped() async {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return Dialog(
+          child: Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Row(
+              children: const [
+                CircularProgressIndicator(),
+                SizedBox(width: 20),
+                Text(
+                  'Loading',
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
     final loginRes = await ClientApi.login(
         controllerUsername.text, controllerPassword.text, context);
     if (loginRes['success']) {
