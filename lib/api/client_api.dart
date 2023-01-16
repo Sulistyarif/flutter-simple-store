@@ -11,7 +11,7 @@ import 'package:simple_store/models/products.dart' as product_class;
 import 'package:simple_store/models/users.dart' as user_class;
 
 class ClientApi {
-  static final Uri uri = Uri.parse('http://172.20.10.6:5004');
+  static final Uri uri = Uri.parse('http://api.zakia-dev.my.id');
   static final client = http.Client();
 
   static Future<Map<String, dynamic>> login(username, password, context) async {

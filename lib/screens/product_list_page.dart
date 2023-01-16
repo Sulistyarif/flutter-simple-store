@@ -36,7 +36,7 @@ class _ProductListPageState extends State<ProductListPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
+      /* appBar: AppBar(
         title: const Text('Simple Store'),
         actions: [
           GestureDetector(
@@ -67,7 +67,7 @@ class _ProductListPageState extends State<ProductListPage> {
             ),
           ),
         ],
-      ),
+      ), */
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(

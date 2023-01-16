@@ -4,7 +4,6 @@ import 'package:provider/provider.dart';
 import 'package:simple_store/api/client_api.dart';
 import 'package:simple_store/data/provider_user.dart';
 import 'package:simple_store/models/categories.dart';
-import 'package:simple_store/models/products.dart';
 import 'package:simple_store/screens/pick_category_page.dart';
 import 'package:simple_store/utlis/utils.dart';
 import 'package:simple_store/widget/dialog_yes_no.dart';
