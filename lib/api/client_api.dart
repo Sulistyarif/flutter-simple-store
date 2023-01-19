@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:developer';
 
+import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 import 'package:simple_store/data/provider_category.dart';
@@ -10,9 +11,12 @@ import 'package:simple_store/models/categories.dart' as category_class;
 import 'package:simple_store/models/products.dart' as product_class;
 import 'package:simple_store/models/users.dart' as user_class;
 
+import '../controller/product_controller.dart';
+
 class ClientApi {
   static final Uri uri = Uri.parse('http://api.zakia-dev.my.id');
   static final client = http.Client();
+  static final productController = Get.find<ProductController>();
 
   static Future<Map<String, dynamic>> login(username, password, context) async {
     var response = await client.post(
@@ -124,6 +128,7 @@ class ClientApi {
         : [];
     Provider.of<ProviderProduct>(context, listen: false)
         .setProductList(responseList);
+    productController.setAllProduct(responseList);
     log(response.body);
   }
 

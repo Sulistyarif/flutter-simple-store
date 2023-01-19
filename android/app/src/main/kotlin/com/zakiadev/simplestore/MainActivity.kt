@@ -1,4 +1,4 @@
-package com.example.simple_store
+package com.zakiadev.simplestore
 
 import io.flutter.embedding.android.FlutterActivity
 

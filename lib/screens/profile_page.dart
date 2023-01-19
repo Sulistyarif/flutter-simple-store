@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:provider/provider.dart';
 import 'package:simple_store/data/provider_user.dart';
 import 'package:simple_store/models/users.dart';
@@ -13,12 +14,26 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
   bool isLoaded = false;
   Users? user;
+  final GoogleSignIn _googleSignIn = GoogleSignIn(
+    scopes: [
+      'email',
+      'https://www.googleapis.com/auth/contacts.readonly',
+    ],
+  );
 
-  /* @override
+  @override
   void initState() {
-    _loadData();
+    // _loadData();
+    _googleSignIn.onCurrentUserChanged.listen((event) {
+      if (event != null) {
+        getContact(event);
+        print('====== any account');
+      } else {
+        print('====== null account');
+      }
+    });
     super.initState();
-  } */
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +58,20 @@ class _ProfilePageState extends State<ProfilePage> {
                 ),
               ],
             )
-          : const SizedBox(),
+          : SizedBox(
+              child: Center(
+                child: ElevatedButton(
+                  onPressed: () async {
+                    await _googleSignIn.signIn();
+                    bool isSigned = await _googleSignIn.isSignedIn();
+                    if (isSigned) {
+                      print(_googleSignIn.currentUser!.displayName);
+                    }
+                  },
+                  child: const Text('Login with google'),
+                ),
+              ),
+            ),
     );
   }
 
@@ -54,5 +82,9 @@ class _ProfilePageState extends State<ProfilePage> {
       isLoaded = true;
       setState(() {});
     }
+  }
+
+  void getContact(GoogleSignInAccount account) {
+    print(account.displayName);
   }
 }
