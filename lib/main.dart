@@ -1,3 +1,4 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
@@ -7,7 +8,9 @@ import 'package:simple_store/data/provider_product.dart';
 import 'package:simple_store/data/provider_user.dart';
 import 'package:simple_store/screens/main_menu_page.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(
     MultiProvider(
       providers: [
@@ -15,7 +18,7 @@ void main() {
         ChangeNotifierProvider(create: (context) => ProviderCategory()),
         ChangeNotifierProvider(create: (context) => ProviderProduct()),
       ],
-      child: GetMaterialApp(
+      child: const GetMaterialApp(
         debugShowCheckedModeBanner: false,
         home: MyApp(),
       ),
@@ -23,9 +26,20 @@ void main() {
   );
 }
 
-class MyApp extends StatelessWidget {
-  MyApp({super.key});
+class MyApp extends StatefulWidget {
+  const MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
   final productController = Get.put(ProductController());
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {

@@ -17,7 +17,7 @@ class _ProfilePageState extends State<ProfilePage> {
   final GoogleSignIn _googleSignIn = GoogleSignIn(
     scopes: [
       'email',
-      'https://www.googleapis.com/auth/contacts.readonly',
+      // 'https://www.googleapis.com/auth/contacts.readonly',
     ],
   );
 
@@ -86,5 +86,9 @@ class _ProfilePageState extends State<ProfilePage> {
 
   void getContact(GoogleSignInAccount account) {
     print(account.displayName);
+    print(account.email);
+    print(account.id);
+    print(account.photoUrl);
+    print(account.serverAuthCode);
   }
 }
