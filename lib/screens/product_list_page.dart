@@ -75,7 +75,7 @@ class _ProductListPageState extends State<ProductListPage> {
         padding: const EdgeInsets.all(8.0),
         child: Column(
           children: [
-            TextField(
+            /* TextField(
               controller: controllerSearch,
               decoration: InputDecoration(
                 border: OutlineInputBorder(
@@ -88,6 +88,9 @@ class _ProductListPageState extends State<ProductListPage> {
                 fillColor: Colors.white70,
                 suffixIcon: const Icon(Icons.search),
               ),
+            ), */
+            CupertinoSearchTextField(
+              controller: controllerSearch,
             ),
             const SizedBox(height: 10),
             Expanded(

@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:simple_store/screens/product_list_page.dart';
 import 'package:simple_store/screens/profile_page.dart';
+
 import 'package:simple_store/screens/user_product_page.dart';
 
 class MainMenuPage extends StatefulWidget {

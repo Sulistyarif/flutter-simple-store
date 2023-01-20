@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:simple_store/controller/product_controller.dart';
+import 'package:simple_store/controller/user_controller.dart';
 import 'package:simple_store/data/provider_category.dart';
 import 'package:simple_store/data/provider_product.dart';
 import 'package:simple_store/data/provider_user.dart';
@@ -35,6 +36,7 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   final productController = Get.put(ProductController());
+  final userController = Get.put(UserController());
 
   @override
   void initState() {

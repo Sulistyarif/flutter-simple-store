@@ -1,8 +1,12 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:provider/provider.dart';
 import 'package:simple_store/data/provider_user.dart';
 import 'package:simple_store/models/users.dart';
+
+import '../controller/user_controller.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -12,83 +16,90 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-  bool isLoaded = false;
-  Users? user;
-  final GoogleSignIn _googleSignIn = GoogleSignIn(
-    scopes: [
-      'email',
-      // 'https://www.googleapis.com/auth/contacts.readonly',
-    ],
-  );
-
-  @override
-  void initState() {
-    // _loadData();
-    _googleSignIn.onCurrentUserChanged.listen((event) {
-      if (event != null) {
-        getContact(event);
-        print('====== any account');
-      } else {
-        print('====== null account');
-      }
-    });
-    super.initState();
-  }
+  final userController = Get.find<UserController>();
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      /* appBar: AppBar(
-        title: const Text('Profile'),
-      ), */
-      body: isLoaded
-          ? Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Text(
-                  user!.username!,
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(fontWeight: FontWeight.bold),
-                ),
-                Text(
-                  user!.email!,
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(fontWeight: FontWeight.bold),
-                ),
-              ],
-            )
-          : SizedBox(
-              child: Center(
-                child: ElevatedButton(
-                  onPressed: () async {
-                    await _googleSignIn.signIn();
-                    bool isSigned = await _googleSignIn.isSignedIn();
-                    if (isSigned) {
-                      print(_googleSignIn.currentUser!.displayName);
-                    }
-                  },
-                  child: const Text('Login with google'),
-                ),
-              ),
-            ),
+    return Scaffold(body: Obx(
+      () {
+        return SizedBox(
+          child: userController.isLoggedIn.value
+              ? contentLoggedIn()
+              : contentLoggedOut(),
+        );
+      },
+    ));
+  }
+
+  Widget contentLoggedOut() {
+    return Center(
+      child: ElevatedButton(
+        onPressed: () {
+          userController.loginWithGoogle();
+        },
+        child: const Text('Login with google'),
+      ),
     );
   }
 
-  void _loadData() {
-    bool isLoggedIn = Provider.of<ProviderUser>(context).getStatusLogin();
-    if (isLoggedIn) {
-      user = Provider.of<ProviderUser>(context, listen: false).user;
-      isLoaded = true;
-      setState(() {});
-    }
-  }
-
-  void getContact(GoogleSignInAccount account) {
-    print(account.displayName);
-    print(account.email);
-    print(account.id);
-    print(account.photoUrl);
-    print(account.serverAuthCode);
+  Widget contentLoggedIn() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        userController.auth.currentUser!.photoURL != null
+            ? Image.network(
+                userController.auth.currentUser!.photoURL!,
+                width: 75,
+                height: 75,
+              )
+            : const Icon(Icons.person),
+        const SizedBox(height: 10),
+        const Text(
+          'Name',
+          textAlign: TextAlign.center,
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
+        Text(
+          userController.auth.currentUser!.displayName!,
+          textAlign: TextAlign.center,
+          style: const TextStyle(),
+        ),
+        const SizedBox(height: 10),
+        const Text(
+          'Email',
+          textAlign: TextAlign.center,
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
+        Text(
+          userController.auth.currentUser!.email!,
+          textAlign: TextAlign.center,
+          style: const TextStyle(),
+        ),
+        const SizedBox(height: 10),
+        const Text(
+          'UID',
+          textAlign: TextAlign.center,
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
+        Text(
+          userController.auth.currentUser!.uid,
+          textAlign: TextAlign.center,
+          style: const TextStyle(),
+        ),
+        const SizedBox(height: 15),
+        Padding(
+          padding: EdgeInsets.symmetric(
+              horizontal: MediaQuery.of(context).size.width / 4),
+          child: ElevatedButton(
+            style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+            onPressed: () {
+              userController.logoutGoogle();
+            },
+            child: const Text('Logout'),
+          ),
+        )
+      ],
+    );
   }
 }
