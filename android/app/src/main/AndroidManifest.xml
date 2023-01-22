@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.zakiadev.simplestore">
    <application
-        android:label="simple_store"
+        android:label="Simple Store"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

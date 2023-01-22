@@ -6,15 +6,12 @@ import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:simple_store/api/client_api.dart';
 import 'package:simple_store/controller/product_controller.dart';
+import 'package:simple_store/controller/user_controller.dart';
 import 'package:simple_store/data/provider_product.dart';
 import 'package:simple_store/data/provider_user.dart';
 import 'package:simple_store/models/products.dart';
-import 'package:simple_store/screens/login_page.dart';
-import 'package:simple_store/screens/profile_menu_page.dart';
 import 'package:simple_store/utlis/utils.dart';
 import 'package:simple_store/widget/item_product.dart';
-
-import '../models/users.dart';
 
 class ProductListPage extends StatefulWidget {
   const ProductListPage({super.key});
@@ -25,6 +22,7 @@ class ProductListPage extends StatefulWidget {
 
 class _ProductListPageState extends State<ProductListPage> {
   final productController = Get.find<ProductController>();
+  final userController = Get.find<UserController>();
   TextEditingController controllerSearch = TextEditingController();
   bool isLoggedIn = false;
   List<Products> listAllProduct = [];
@@ -122,8 +120,7 @@ class _ProductListPageState extends State<ProductListPage> {
   }
 
   void _loadData() async {
-    isLoggedIn =
-        Provider.of<ProviderUser>(context, listen: false).getStatusLogin();
+    isLoggedIn = userController.isLoggedIn.value;
     ClientApi.getAllProducts(context);
   }
 }

@@ -4,6 +4,7 @@ import 'dart:developer';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
+import 'package:simple_store/controller/user_controller.dart';
 import 'package:simple_store/data/provider_category.dart';
 import 'package:simple_store/data/provider_product.dart';
 import 'package:simple_store/data/provider_user.dart';
@@ -14,9 +15,11 @@ import 'package:simple_store/models/users.dart' as user_class;
 import '../controller/product_controller.dart';
 
 class ClientApi {
-  static final Uri uri = Uri.parse('http://api.zakia-dev.my.id');
+  // static final Uri uri = Uri.parse('http://api.zakia-dev.my.id');
+  static final Uri uri = Uri.parse('http://192.168.100.27:5004');
   static final client = http.Client();
   static final productController = Get.find<ProductController>();
+  static final userController = Get.find<UserController>();
 
   static Future<Map<String, dynamic>> login(username, password, context) async {
     var response = await client.post(
@@ -190,5 +193,28 @@ class ClientApi {
     } else {
       return false;
     }
+  }
+
+  static Future<Map<String, dynamic>> loginOrRegister(
+      username, password, email, context) async {
+    var response = await client.post(
+      Uri.parse('$uri/loginorregister'),
+      headers: {
+        "content-type": "application/x-www-form-urlencoded",
+      },
+      body: {
+        'username': username,
+        'password': password,
+        'email': email,
+        'name': username,
+      },
+    );
+    Map<String, dynamic> resJson = json.decode(response.body);
+    /* Provider.of<ProviderUser>(context, listen: false)
+        .setUser(user_class.Users.fromJson(resJson['data'])); */
+    user_class.Users newUser = user_class.Users.fromJson(resJson['data']);
+    userController.changeLoggedInUser(newUser);
+    log(response.body);
+    return resJson;
   }
 }

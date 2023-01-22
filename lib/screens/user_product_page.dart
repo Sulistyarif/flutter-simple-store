@@ -1,10 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:simple_store/api/client_api.dart';
+import 'package:simple_store/controller/product_controller.dart';
+import 'package:simple_store/controller/user_controller.dart';
 import 'package:simple_store/data/provider_product.dart';
 import 'package:simple_store/data/provider_user.dart';
-import 'package:simple_store/screens/add_new_product_page.dart';
 import 'package:simple_store/widget/item_product.dart';
 
 class UserProductPage extends StatefulWidget {
@@ -17,6 +19,8 @@ class UserProductPage extends StatefulWidget {
 class _UserProductPageState extends State<UserProductPage> {
   TextEditingController controllerSearch = TextEditingController();
   bool isLoggedIn = false;
+  final userController = Get.find<UserController>();
+  final productController = Get.find<ProductController>();
 
   /* @override
   void initState() {
@@ -27,7 +31,7 @@ class _UserProductPageState extends State<UserProductPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      /* appBar: AppBar(
+        /* appBar: AppBar(
         title: const Text('My Product'),
         actions: [
           GestureDetector(
@@ -54,56 +58,56 @@ class _UserProductPageState extends State<UserProductPage> {
           ),
         ],
       ), */
-      body: isLoggedIn
-          ? Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                children: [
-                  TextField(
-                    controller: controllerSearch,
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                      filled: true,
-                      hintStyle: TextStyle(
-                          color: Colors.grey[800], fontStyle: FontStyle.italic),
-                      hintText: "Search product",
-                      fillColor: Colors.white70,
-                      suffixIcon: const Icon(Icons.search),
+        body: Obx(
+      () {
+        return userController.isLoggedIn.value
+            ? Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  children: [
+                    CupertinoSearchTextField(controller: controllerSearch),
+                    const SizedBox(height: 10),
+                    Expanded(
+                      child: productController.myProductList.isNotEmpty
+                          ? Consumer<ProviderProduct>(
+                              builder: (context, value, child) {
+                                return RefreshIndicator(
+                                  onRefresh: () async {
+                                    _loadData();
+                                  },
+                                  child: ListView.builder(
+                                    itemBuilder: (context, index) {
+                                      return ItemProduct(
+                                          item: value.myProductList[index]);
+                                    },
+                                    itemCount: value.myProductList.length,
+                                  ),
+                                );
+                              },
+                            )
+                          : const Center(
+                              child: Text(
+                                'No product found',
+                                style: TextStyle(color: Colors.grey),
+                              ),
+                            ),
                     ),
-                  ),
-                  const SizedBox(height: 10),
-                  Expanded(
-                    child: Consumer<ProviderProduct>(
-                      builder: (context, value, child) {
-                        return RefreshIndicator(
-                          onRefresh: () async {
-                            _loadData();
-                          },
-                          child: ListView.builder(
-                            itemBuilder: (context, index) {
-                              return ItemProduct(
-                                  item: value.myProductList[index]);
-                            },
-                            itemCount: value.myProductList.length,
-                          ),
-                        );
-                      },
-                    ),
-                  ),
-                ],
-              ),
-            )
-          : const Center(child: Text('Please login first')),
-    );
+                  ],
+                ),
+              )
+            : const Center(
+                child: Text('Please login first'),
+              );
+      },
+    ));
   }
 
   void _loadData() {
-    isLoggedIn = Provider.of<ProviderUser>(context).getStatusLogin();
+    isLoggedIn = userController.isLoggedIn.value;
     if (isLoggedIn) {
       ClientApi.getMyProducts(
           context, Provider.of<ProviderUser>(context, listen: false).user!.id);
     }
+    setState(() {});
   }
 }

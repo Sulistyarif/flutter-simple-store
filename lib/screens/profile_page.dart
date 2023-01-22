@@ -1,10 +1,5 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:google_sign_in/google_sign_in.dart';
-import 'package:provider/provider.dart';
-import 'package:simple_store/data/provider_user.dart';
-import 'package:simple_store/models/users.dart';
 
 import '../controller/user_controller.dart';
 
@@ -35,7 +30,7 @@ class _ProfilePageState extends State<ProfilePage> {
     return Center(
       child: ElevatedButton(
         onPressed: () {
-          userController.loginWithGoogle();
+          userController.loginWithGoogle(context);
         },
         child: const Text('Login with google'),
       ),
@@ -48,10 +43,18 @@ class _ProfilePageState extends State<ProfilePage> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         userController.auth.currentUser!.photoURL != null
-            ? Image.network(
-                userController.auth.currentUser!.photoURL!,
-                width: 75,
-                height: 75,
+            ? Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(50),
+                    child: Image.network(
+                      userController.auth.currentUser!.photoURL!,
+                      width: 75,
+                      height: 75,
+                    ),
+                  ),
+                ],
               )
             : const Icon(Icons.person),
         const SizedBox(height: 10),
@@ -98,7 +101,7 @@ class _ProfilePageState extends State<ProfilePage> {
             },
             child: const Text('Logout'),
           ),
-        )
+        ),
       ],
     );
   }

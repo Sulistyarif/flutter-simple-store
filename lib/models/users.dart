@@ -3,6 +3,7 @@ class Users {
   String? username;
   String? email;
   String? password;
+  String? name;
   String? createdAt;
   String? updatedAt;
 
@@ -11,6 +12,7 @@ class Users {
       this.username,
       this.email,
       this.password,
+      this.name,
       this.createdAt,
       this.updatedAt});
 
@@ -19,6 +21,7 @@ class Users {
     username = json['username'];
     email = json['email'];
     password = json['password'];
+    name = json['name'];
     createdAt = json['createdAt'];
     updatedAt = json['updatedAt'];
   }
@@ -29,6 +32,7 @@ class Users {
     data['username'] = this.username;
     data['email'] = this.email;
     data['password'] = this.password;
+    data['name'] = this.name;
     data['createdAt'] = this.createdAt;
     data['updatedAt'] = this.updatedAt;
     return data;

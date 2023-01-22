@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:simple_store/api/client_api.dart';
+import 'package:simple_store/controller/user_controller.dart';
 import 'package:simple_store/data/provider_user.dart';
 import 'package:simple_store/models/products.dart';
 import 'package:simple_store/utlis/utils.dart';
@@ -20,6 +22,7 @@ class ProductDetailPage extends StatefulWidget {
 
 class _ProductDetailPageState extends State<ProductDetailPage> {
   bool isMyProduct = false;
+  final userController = Get.find<UserController>();
 
   @override
   void initState() {
@@ -92,12 +95,10 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
   }
 
   void _loadData() {
-    bool isLoggedIn =
-        Provider.of<ProviderUser>(context, listen: false).getStatusLogin();
+    bool isLoggedIn = userController.isLoggedIn.value;
 
     if (isLoggedIn) {
-      String sellerName =
-          Provider.of<ProviderUser>(context, listen: false).user!.username!;
+      String? sellerName = userController.user.value.username;
       if (sellerName == widget.item.seller) {
         isMyProduct = true;
       }
