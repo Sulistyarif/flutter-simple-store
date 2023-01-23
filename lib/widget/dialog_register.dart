@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import '../api/client_api.dart';
 
@@ -72,7 +73,7 @@ class _DialogRegisterState extends State<DialogRegister> {
                 bool res = await ClientApi.register(controllerUsername.text,
                     controllerEmail.text, controllerPassword.text);
                 if (res) {
-                  Navigator.of(context).pop();
+                  Get.back();
                 }
               },
               child: const Text('Register'),

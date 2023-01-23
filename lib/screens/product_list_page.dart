@@ -3,12 +3,9 @@ import 'dart:math';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:provider/provider.dart';
 import 'package:simple_store/api/client_api.dart';
 import 'package:simple_store/controller/product_controller.dart';
 import 'package:simple_store/controller/user_controller.dart';
-import 'package:simple_store/data/provider_product.dart';
-import 'package:simple_store/data/provider_user.dart';
 import 'package:simple_store/models/products.dart';
 import 'package:simple_store/utlis/utils.dart';
 import 'package:simple_store/widget/item_product.dart';
@@ -91,28 +88,26 @@ class _ProductListPageState extends State<ProductListPage> {
               controller: controllerSearch,
             ),
             const SizedBox(height: 10),
-            Expanded(
-              child: Consumer<ProviderProduct>(
-                builder: (context, value, child) {
-                  listAllProduct = value.productList;
-                  return RefreshIndicator(
-                    onRefresh: () async {
-                      _loadData();
+            Expanded(child: Obx(
+              () {
+                listAllProduct = productController.allProductList;
+                return RefreshIndicator(
+                  onRefresh: () async {
+                    _loadData();
+                  },
+                  child: ListView.builder(
+                    itemBuilder: (context, index) {
+                      Random rnd = Random();
+                      return ItemProduct(
+                        key: Key(Utils.getRandomString(6, rnd)),
+                        item: productController.allProductList[index],
+                      );
                     },
-                    child: ListView.builder(
-                      itemBuilder: (context, index) {
-                        Random rnd = Random();
-                        return ItemProduct(
-                          key: Key(Utils.getRandomString(6, rnd)),
-                          item: value.productList[index],
-                        );
-                      },
-                      itemCount: value.productList.length,
-                    ),
-                  );
-                },
-              ),
-            ),
+                    itemCount: productController.allProductList.length,
+                  ),
+                );
+              },
+            )),
           ],
         ),
       ),
@@ -121,6 +116,6 @@ class _ProductListPageState extends State<ProductListPage> {
 
   void _loadData() async {
     isLoggedIn = userController.isLoggedIn.value;
-    ClientApi.getAllProducts(context);
+    ClientApi.getAllProducts();
   }
 }

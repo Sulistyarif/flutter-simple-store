@@ -12,12 +12,11 @@ class CustomRoundedButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return ElevatedButton(
       style: ButtonStyle(
-        backgroundColor:
-            MaterialStateProperty.all(warna != null ? warna : Colors.blue),
+        backgroundColor: MaterialStateProperty.all(warna ?? Colors.blue),
         shape: MaterialStateProperty.all<RoundedRectangleBorder>(
           RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(18.0),
-            side: BorderSide(
+            side: const BorderSide(
               color: Colors.transparent,
             ),
           ),

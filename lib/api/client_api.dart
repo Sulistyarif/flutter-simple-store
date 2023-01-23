@@ -3,11 +3,8 @@ import 'dart:developer';
 
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
-import 'package:provider/provider.dart';
+import 'package:simple_store/controller/category_controller.dart';
 import 'package:simple_store/controller/user_controller.dart';
-import 'package:simple_store/data/provider_category.dart';
-import 'package:simple_store/data/provider_product.dart';
-import 'package:simple_store/data/provider_user.dart';
 import 'package:simple_store/models/categories.dart' as category_class;
 import 'package:simple_store/models/products.dart' as product_class;
 import 'package:simple_store/models/users.dart' as user_class;
@@ -15,11 +12,12 @@ import 'package:simple_store/models/users.dart' as user_class;
 import '../controller/product_controller.dart';
 
 class ClientApi {
-  // static final Uri uri = Uri.parse('http://api.zakia-dev.my.id');
-  static final Uri uri = Uri.parse('http://192.168.100.27:5004');
+  static final Uri uri = Uri.parse('http://api.zakia-dev.my.id');
+  // static final Uri uri = Uri.parse('http://192.168.18.6:5004');
   static final client = http.Client();
   static final productController = Get.find<ProductController>();
   static final userController = Get.find<UserController>();
+  static final categoryController = Get.find<CategoryController>();
 
   static Future<Map<String, dynamic>> login(username, password, context) async {
     var response = await client.post(
@@ -33,8 +31,8 @@ class ClientApi {
       },
     );
     Map<String, dynamic> resJson = json.decode(response.body);
-    Provider.of<ProviderUser>(context, listen: false)
-        .setUser(user_class.Users.fromJson(resJson['data']));
+    userController
+        .changeLoggedInUser(user_class.Users.fromJson(resJson['data']));
     log(response.body);
     return resJson;
   }
@@ -75,7 +73,7 @@ class ClientApi {
     return resJson['message'];
   }
 
-  static Future<void> getCategories(context) async {
+  static Future<void> getCategories() async {
     var response = await client.get(
       Uri.parse('$uri/category'),
       headers: {
@@ -90,8 +88,9 @@ class ClientApi {
                 (json) => category_class.Categories.fromJson(json))
             .toList()
         : [];
-    Provider.of<ProviderCategory>(context, listen: false)
-        .setCategoryList(responseList);
+    /* Provider.of<ProviderCategory>(context, listen: false)
+        .setCategoryList(responseList); */
+    categoryController.setCategoryList(responseList);
     log(response.body);
   }
 
@@ -114,7 +113,7 @@ class ClientApi {
     }
   }
 
-  static Future<void> getAllProducts(context) async {
+  static Future<void> getAllProducts() async {
     var response = await client.get(
       Uri.parse('$uri/product'),
       headers: {
@@ -129,8 +128,8 @@ class ClientApi {
                 (json) => product_class.Products.fromJson(json))
             .toList()
         : [];
-    Provider.of<ProviderProduct>(context, listen: false)
-        .setProductList(responseList);
+    /* Provider.of<ProviderProduct>(context, listen: false)
+        .setProductList(responseList); */
     productController.setAllProduct(responseList);
     log(response.body);
   }
@@ -160,9 +159,9 @@ class ClientApi {
     }
   }
 
-  static Future<void> getMyProducts(context, userId) async {
+  static Future<void> getMyProducts() async {
     var response = await client.get(
-      Uri.parse('$uri/product/$userId'),
+      Uri.parse('$uri/product/${userController.user.value.id}'),
       headers: {
         "content-type": "application/x-www-form-urlencoded",
       },
@@ -175,8 +174,9 @@ class ClientApi {
                 (json) => product_class.Products.fromJson(json))
             .toList()
         : [];
-    Provider.of<ProviderProduct>(context, listen: false)
-        .setMyProductList(responseList);
+    /* Provider.of<ProviderProduct>(context, listen: false)
+        .setMyProductList(responseList); */
+    productController.setAllMyProduct(responseList);
     log(response.body);
   }
 
@@ -187,7 +187,8 @@ class ClientApi {
         "content-type": "application/x-www-form-urlencoded",
       },
     );
-    var resJson = json.decode(response.body).cast<Map<String, dynamic>>();
+    // var resJson = json.decode(response.body).cast<Map<String, dynamic>>();
+    Map<String, dynamic> resJson = json.decode(response.body);
     if (resJson['success']) {
       return true;
     } else {

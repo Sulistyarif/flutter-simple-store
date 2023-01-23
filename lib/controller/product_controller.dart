@@ -6,10 +6,12 @@ class ProductController extends GetxController {
   final myProductList = <Products>[].obs;
 
   setAllProduct(List<Products> param) {
-    allProductList.value = param;
+    // allProductList.value = param;
+    allProductList(param);
   }
 
   setAllMyProduct(List<Products> param) {
-    myProductList.value = param;
+    // myProductList.value = param;
+    myProductList(param);
   }
 }

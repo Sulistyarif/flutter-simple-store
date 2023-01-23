@@ -1,11 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:get/get.dart';
 import 'package:simple_store/api/client_api.dart';
-import 'package:simple_store/data/provider_user.dart';
+import 'package:simple_store/controller/user_controller.dart';
 import 'package:simple_store/models/categories.dart';
 import 'package:simple_store/screens/pick_category_page.dart';
-import 'package:simple_store/utlis/utils.dart';
 import 'package:simple_store/widget/dialog_yes_no.dart';
 
 class AddNewProductPage extends StatefulWidget {
@@ -21,6 +20,7 @@ class _AddNewProductPageState extends State<AddNewProductPage> {
   TextEditingController controllerDesc = TextEditingController();
   TextEditingController controllerPrice = TextEditingController();
   Categories? itemCategories;
+  final userController = Get.find<UserController>();
 
   @override
   Widget build(BuildContext context) {
@@ -108,6 +108,7 @@ class _AddNewProductPageState extends State<AddNewProductPage> {
             const SizedBox(height: 5),
             TextField(
               controller: controllerPrice,
+              keyboardType: TextInputType.number,
               decoration: InputDecoration(
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10.0),
@@ -163,29 +164,26 @@ class _AddNewProductPageState extends State<AddNewProductPage> {
   }
 
   void _onProductAdd() async {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return DialogYesNo(
-            onYes: () async {
-              bool isSuccess = await ClientApi.createProduct(
-                controllerName.text,
-                controllerDesc.text,
-                itemCategories!.id!,
-                Provider.of<ProviderUser>(context, listen: false).user!.id!,
-                controllerPrice.text,
-                'image',
-              );
-              if (isSuccess) {
-                widget.onProductAdded();
-                Navigator.of(context).pop();
-                Navigator.of(this.context).pop();
-              } else {
-                Utils.showSnackBar(context, 'Failed to create product');
-              }
-            },
-            title: 'Are you want to add this product?');
-      },
+    Get.dialog(
+      DialogYesNo(
+          onYes: () async {
+            bool isSuccess = await ClientApi.createProduct(
+              controllerName.text,
+              controllerDesc.text,
+              itemCategories!.id!,
+              userController.user.value.id!,
+              controllerPrice.text,
+              'image',
+            );
+            if (isSuccess) {
+              widget.onProductAdded();
+              Get.back();
+              Get.back();
+            } else {
+              Get.snackbar('Simple Store', 'Failed to create product');
+            }
+          },
+          title: 'Are you want to add this product?'),
     );
   }
 }

@@ -51,7 +51,10 @@ class UserController extends GetxController {
   loginStatusCheck() {
     final curUser = auth.currentUser;
     if (curUser != null) {
+      // change logged in status
       isLoggedIn.value = true;
+
+      // load user data from cache
       final storage = GetStorage();
       final id = storage.read('id');
       final email = storage.read('email');
@@ -66,6 +69,11 @@ class UserController extends GetxController {
         name: username,
       );
       user(newUser);
+
+      // load all data needed
+      ClientApi.getAllProducts();
+      ClientApi.getCategories();
+      ClientApi.getMyProducts();
     }
   }
 

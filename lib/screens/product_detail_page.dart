@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:provider/provider.dart';
 import 'package:simple_store/api/client_api.dart';
 import 'package:simple_store/controller/user_controller.dart';
-import 'package:simple_store/data/provider_user.dart';
 import 'package:simple_store/models/products.dart';
 import 'package:simple_store/utlis/utils.dart';
 import 'package:simple_store/widget/custom_rounded_button.dart';
@@ -11,9 +9,11 @@ import 'package:simple_store/widget/dialog_yes_no.dart';
 
 class ProductDetailPage extends StatefulWidget {
   final Products item;
+  final Function() onAction;
   const ProductDetailPage({
     super.key,
     required this.item,
+    required this.onAction,
   });
 
   @override
@@ -107,24 +107,23 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
   }
 
   void _onDeleteProduct() {
-    // delete product
-    showDialog(
-      context: context,
-      builder: (context) {
-        return DialogYesNo(
+    Get.dialog(
+      DialogYesNo(
           onYes: () async {
             bool res = await ClientApi.deleteProduct(context, widget.item.id);
             if (res) {
-              ClientApi.getMyProducts(
-                context,
-                Provider.of<ProviderUser>(context, listen: false).user!.id!,
-              );
+              _onAction();
             }
-            Navigator.of(context).pop();
           },
-          title: 'Are you wan to delete this product?',
-        );
-      },
+          title: 'Are you want to delete this product?'),
     );
+  }
+
+  void _onAction() {
+    ClientApi.getAllProducts();
+    ClientApi.getMyProducts();
+    Get.back();
+    Get.back();
+    Get.back();
   }
 }

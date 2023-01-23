@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:simple_store/api/client_api.dart';
-import 'package:simple_store/utlis/utils.dart';
 
 class DialogNewCategory extends StatefulWidget {
   final Function() onAdded;
@@ -44,9 +44,9 @@ class _DialogNewCategoryState extends State<DialogNewCategory> {
                 bool res = await ClientApi.createCategory(controllerName.text);
                 if (res) {
                   widget.onAdded();
-                  Navigator.of(context).pop();
+                  Get.back();
                 } else {
-                  Utils.showSnackBar(context, 'New category added.');
+                  Get.snackbar('Simple Store', 'New category added.');
                 }
               },
               child: const Text('Submit'),
