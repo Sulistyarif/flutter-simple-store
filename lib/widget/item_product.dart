@@ -1,7 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:simple_store/api/client_api.dart';
 import 'package:simple_store/models/products.dart';
 import 'package:simple_store/screens/product_detail_page.dart';
 import 'package:simple_store/utlis/utils.dart';
