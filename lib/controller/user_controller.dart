@@ -34,7 +34,7 @@ class UserController extends GetxController {
         ClientApi.loginOrRegister(
             user.displayName, 'password', user.email, context);
 
-        isLoggedIn.value = true;
+        loginStatusCheck();
       }
       return;
     } catch (e) {
@@ -45,6 +45,10 @@ class UserController extends GetxController {
   Future<void> logoutGoogle() async {
     await googleSignIn.signOut();
     await auth.signOut();
+    final storage = GetStorage();
+    storage.remove('id');
+    storage.remove('email');
+    storage.remove('username');
     isLoggedIn.value = false;
   }
 
@@ -53,7 +57,6 @@ class UserController extends GetxController {
     if (curUser != null) {
       // change logged in status
       isLoggedIn.value = true;
-
       // load user data from cache
       final storage = GetStorage();
       final id = storage.read('id');

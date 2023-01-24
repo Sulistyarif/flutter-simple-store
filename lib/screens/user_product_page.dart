@@ -29,18 +29,20 @@ class _UserProductPageState extends State<UserProductPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            Get.to(
-              AddNewProductPage(
-                onProductAdded: () {
-                  ClientApi.getMyProducts();
+        floatingActionButton: userController.isLoggedIn.value
+            ? FloatingActionButton(
+                onPressed: () {
+                  Get.to(
+                    AddNewProductPage(
+                      onProductAdded: () {
+                        ClientApi.getMyProducts();
+                      },
+                    ),
+                  );
                 },
-              ),
-            );
-          },
-          child: const Icon(Icons.add),
-        ),
+                child: const Icon(Icons.add),
+              )
+            : null,
         /* appBar: AppBar(
         title: const Text('My Product'),
         actions: [
