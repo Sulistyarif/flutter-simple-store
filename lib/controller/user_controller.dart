@@ -34,7 +34,7 @@ class UserController extends GetxController {
         ClientApi.loginOrRegister(
             user.displayName, 'password', user.email, context);
 
-        loginStatusCheck();
+        // loginStatusCheck();
       }
       return;
     } catch (e) {
@@ -52,16 +52,14 @@ class UserController extends GetxController {
     isLoggedIn.value = false;
   }
 
-  loginStatusCheck() {
+  loginStatusCheck() async {
     final curUser = auth.currentUser;
     if (curUser != null) {
-      // change logged in status
-      isLoggedIn.value = true;
       // load user data from cache
       final storage = GetStorage();
-      final id = storage.read('id');
-      final email = storage.read('email');
-      final username = storage.read('username');
+      final id = await storage.read('id');
+      final email = await storage.read('email');
+      final username = await storage.read('username');
       Users newUser = Users(
         createdAt: '',
         email: email,
@@ -77,6 +75,9 @@ class UserController extends GetxController {
       ClientApi.getAllProducts();
       ClientApi.getCategories();
       ClientApi.getMyProducts();
+
+      // change logged in status
+      isLoggedIn.value = true;
     }
   }
 
@@ -86,5 +87,11 @@ class UserController extends GetxController {
     storage.write('id', param.id);
     storage.write('email', param.email);
     storage.write('username', param.username);
+
+    ClientApi.getAllProducts();
+    ClientApi.getCategories();
+    ClientApi.getMyProducts();
+
+    isLoggedIn.value = true;
   }
 }

@@ -214,7 +214,7 @@ class ClientApi {
     /* Provider.of<ProviderUser>(context, listen: false)
         .setUser(user_class.Users.fromJson(resJson['data'])); */
     user_class.Users newUser = user_class.Users.fromJson(resJson['data']);
-    userController.changeLoggedInUser(newUser);
+    await userController.changeLoggedInUser(newUser);
     log(response.body);
     return resJson;
   }

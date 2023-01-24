@@ -1,11 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:simple_store/api/client_api.dart';
 import 'package:simple_store/controller/user_controller.dart';
 import 'package:simple_store/models/categories.dart';
 import 'package:simple_store/screens/pick_category_page.dart';
 import 'package:simple_store/widget/dialog_yes_no.dart';
+import 'dart:io' as Io;
 
 class AddNewProductPage extends StatefulWidget {
   final Function() onProductAdded;
@@ -20,6 +22,9 @@ class _AddNewProductPageState extends State<AddNewProductPage> {
   TextEditingController controllerDesc = TextEditingController();
   TextEditingController controllerPrice = TextEditingController();
   Categories? itemCategories;
+  bool isImageChanged = false;
+  Io.File? _image;
+  final _picker = ImagePicker();
   final userController = Get.find<UserController>();
 
   @override
@@ -126,21 +131,35 @@ class _AddNewProductPageState extends State<AddNewProductPage> {
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 5),
-            Container(
-              height: 70,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: Colors.grey),
-              ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: const [
-                  Icon(
-                    Icons.add,
-                  ),
-                  Text('Add product image'),
-                ],
+            GestureDetector(
+              onTap: () {
+                _showImagePicker(context);
+              },
+              child: Container(
+                height: 70,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(color: Colors.grey),
+                ),
+                child: !isImageChanged
+                    ? Column(
+                        mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: const [
+                          Icon(
+                            Icons.add,
+                          ),
+                          Text('Add product image'),
+                        ],
+                      )
+                    : Container(
+                        height: MediaQuery.of(context).size.height * 0.5,
+                        padding: EdgeInsets.all(8),
+                        decoration: BoxDecoration(
+                            border: Border.all(color: Colors.grey),
+                            borderRadius: BorderRadius.circular(8)),
+                        child: Image.file(_image!),
+                      ),
               ),
             )
           ],
@@ -185,5 +204,57 @@ class _AddNewProductPageState extends State<AddNewProductPage> {
           },
           title: 'Are you want to add this product?'),
     );
+  }
+
+  void _showImagePicker(context) {
+    showModalBottomSheet(
+        context: context,
+        builder: (BuildContext bc) {
+          return SafeArea(
+            child: Container(
+              child: new Wrap(
+                children: <Widget>[
+                  new ListTile(
+                      leading: new Icon(Icons.photo_library),
+                      title: new Text('Photo Library'),
+                      onTap: () {
+                        _imgFromGallery();
+                        Navigator.of(context).pop();
+                      }),
+                  new ListTile(
+                    leading: new Icon(Icons.photo_camera),
+                    title: new Text('Camera'),
+                    onTap: () {
+                      _imgFromCamera();
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                ],
+              ),
+            ),
+          );
+        });
+  }
+
+  _imgFromCamera() async {
+    XFile? image2 =
+        await _picker.pickImage(source: ImageSource.camera, imageQuality: 20);
+
+    setState(() {
+      _image = Io.File(image2!.path);
+      isImageChanged = true;
+    });
+    // uploadImage();
+  }
+
+  _imgFromGallery() async {
+    XFile? image2 =
+        await _picker.pickImage(source: ImageSource.gallery, imageQuality: 20);
+
+    setState(() {
+      _image = Io.File(image2!.path);
+      isImageChanged = true;
+    });
+    // uploadImage();
   }
 }

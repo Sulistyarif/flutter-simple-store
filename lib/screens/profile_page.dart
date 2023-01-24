@@ -15,15 +15,18 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(body: Obx(
-      () {
-        return SizedBox(
-          child: userController.isLoggedIn.value
-              ? contentLoggedIn()
-              : contentLoggedOut(),
-        );
-      },
-    ));
+    return Scaffold(
+      backgroundColor: Colors.grey[200],
+      body: Obx(
+        () {
+          return SizedBox(
+            child: userController.isLoggedIn.value
+                ? contentLoggedIn()
+                : contentLoggedOut(),
+          );
+        },
+      ),
+    );
   }
 
   Widget contentLoggedOut() {
@@ -32,7 +35,26 @@ class _ProfilePageState extends State<ProfilePage> {
         onPressed: () {
           userController.loginWithGoogle(context);
         },
-        child: const Text('Login with google'),
+        style: OutlinedButton.styleFrom(
+          shape: StadiumBorder(),
+          backgroundColor: Colors.white,
+        ),
+        // style: ElevatedButton.styleFrom(backgroundColor: Colors.white),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Image.asset(
+              'assets/images/google-logo.png',
+              height: 20,
+              width: 20,
+            ),
+            const SizedBox(width: 10),
+            const Text(
+              'Login with google',
+              style: TextStyle(color: Colors.blue, fontWeight: FontWeight.bold),
+            ),
+          ],
+        ),
       ),
     );
   }
