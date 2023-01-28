@@ -35,7 +35,8 @@ class _AddNewProductPageState extends State<AddNewProductPage> {
         actions: [
           GestureDetector(
             onTap: () {
-              _onProductAdd();
+              // _onProductAdd();
+              _onProductAdd2();
             },
             child: const Padding(
               padding: EdgeInsets.symmetric(horizontal: 15),
@@ -193,6 +194,30 @@ class _AddNewProductPageState extends State<AddNewProductPage> {
               userController.user.value.id!,
               controllerPrice.text,
               'image',
+            );
+            if (isSuccess) {
+              widget.onProductAdded();
+              Get.back();
+              Get.back();
+            } else {
+              Get.snackbar('Simple Store', 'Failed to create product');
+            }
+          },
+          title: 'Are you want to add this product?'),
+    );
+  }
+
+  void _onProductAdd2() async {
+    Get.dialog(
+      DialogYesNo(
+          onYes: () async {
+            bool isSuccess = await ClientApi.createProductWImage(
+              controllerName.text,
+              controllerDesc.text,
+              itemCategories!.id!,
+              userController.user.value.id!,
+              controllerPrice.text,
+              _image!.path,
             );
             if (isSuccess) {
               widget.onProductAdded();

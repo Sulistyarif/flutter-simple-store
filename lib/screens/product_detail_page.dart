@@ -42,9 +42,31 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
           children: [
             const SizedBox(height: 20),
             Image.network(
-              'https://picsum.photos/200',
+              '${ClientApi.uri}/${widget.item.image}',
               height: MediaQuery.of(context).size.width / 2,
               width: MediaQuery.of(context).size.width / 2,
+              errorBuilder: (context, error, stackTrace) {
+                return Container(
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.grey),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  padding: const EdgeInsets.symmetric(vertical: 50),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(
+                        Icons.image_not_supported_outlined,
+                        color: Colors.grey,
+                      ),
+                      Text(
+                        'No picture available',
+                        style: TextStyle(color: Colors.grey),
+                      ),
+                    ],
+                  ),
+                );
+              },
             ),
             const SizedBox(height: 20),
             Text(

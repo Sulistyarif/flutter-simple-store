@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
@@ -12,8 +13,8 @@ import 'package:simple_store/models/users.dart' as user_class;
 import '../controller/product_controller.dart';
 
 class ClientApi {
-  static final Uri uri = Uri.parse('http://api.zakia-dev.my.id');
-  // static final Uri uri = Uri.parse('http://192.168.18.6:5004');
+  // static final Uri uri = Uri.parse('http://api.zakia-dev.my.id');
+  static final Uri uri = Uri.parse('http://192.168.18.6:5004');
   static final client = http.Client();
   static final productController = Get.find<ProductController>();
   static final userController = Get.find<UserController>();
@@ -88,8 +89,6 @@ class ClientApi {
                 (json) => category_class.Categories.fromJson(json))
             .toList()
         : [];
-    /* Provider.of<ProviderCategory>(context, listen: false)
-        .setCategoryList(responseList); */
     categoryController.setCategoryList(responseList);
     log(response.body);
   }
@@ -128,8 +127,6 @@ class ClientApi {
                 (json) => product_class.Products.fromJson(json))
             .toList()
         : [];
-    /* Provider.of<ProviderProduct>(context, listen: false)
-        .setProductList(responseList); */
     productController.setAllProduct(responseList);
     log(response.body);
   }
@@ -174,8 +171,6 @@ class ClientApi {
                 (json) => product_class.Products.fromJson(json))
             .toList()
         : [];
-    /* Provider.of<ProviderProduct>(context, listen: false)
-        .setMyProductList(responseList); */
     productController.setAllMyProduct(responseList);
     log(response.body);
   }
@@ -211,11 +206,31 @@ class ClientApi {
       },
     );
     Map<String, dynamic> resJson = json.decode(response.body);
-    /* Provider.of<ProviderUser>(context, listen: false)
-        .setUser(user_class.Users.fromJson(resJson['data'])); */
     user_class.Users newUser = user_class.Users.fromJson(resJson['data']);
     await userController.changeLoggedInUser(newUser);
     log(response.body);
     return resJson;
+  }
+
+  static Future<bool> createProductWImage(String name, String desc,
+      int categoryId, int sellerId, String price, String imagePath) async {
+    var request =
+        http.MultipartRequest('POST', Uri.parse('$uri/productwimage'));
+    request.files.add(
+      await http.MultipartFile.fromPath('image', imagePath),
+    );
+    request.fields.addAll(<String, String>{
+      'name': name,
+      'description': desc,
+      'category_id': categoryId.toString(),
+      'seller_id': sellerId.toString(),
+      'price': price.toString(),
+    });
+    var response = await request.send();
+    if (response.statusCode == 200) {
+      return true;
+    } else {
+      return false;
+    }
   }
 }

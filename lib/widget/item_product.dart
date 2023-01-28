@@ -4,6 +4,8 @@ import 'package:simple_store/models/products.dart';
 import 'package:simple_store/screens/product_detail_page.dart';
 import 'package:simple_store/utlis/utils.dart';
 
+import '../api/client_api.dart';
+
 class ItemProduct extends StatefulWidget {
   final Products item;
   const ItemProduct({super.key, required this.item});
@@ -39,9 +41,28 @@ class _ItemProductState extends State<ItemProduct> {
           child: Row(
             children: [
               Image.network(
-                'https://picsum.photos/200',
-                height: 75,
-                width: 75,
+                '${ClientApi.uri}/${widget.item.image}',
+                height: MediaQuery.of(context).size.width / 7,
+                width: MediaQuery.of(context).size.width / 7,
+                fit: BoxFit.cover,
+                errorBuilder: (context, error, stackTrace) {
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(
+                          Icons.image_not_supported_outlined,
+                          color: Colors.grey,
+                        ),
+                        Text(
+                          'No pict',
+                          style: TextStyle(color: Colors.grey),
+                        ),
+                      ],
+                    ),
+                  );
+                },
               ),
               const SizedBox(width: 15),
               Expanded(
