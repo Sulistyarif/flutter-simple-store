@@ -136,30 +136,60 @@ class _AddNewProductPageState extends State<AddNewProductPage> {
               onTap: () {
                 _showImagePicker(context);
               },
-              child: Container(
-                height: 70,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: Colors.grey),
-                ),
+              child: SizedBox(
                 child: !isImageChanged
-                    ? Column(
-                        mainAxisSize: MainAxisSize.min,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: const [
-                          Icon(
-                            Icons.add,
-                          ),
-                          Text('Add product image'),
-                        ],
-                      )
-                    : Container(
-                        height: MediaQuery.of(context).size.height * 0.5,
-                        padding: EdgeInsets.all(8),
+                    ? Container(
+                        height: 80,
                         decoration: BoxDecoration(
-                            border: Border.all(color: Colors.grey),
-                            borderRadius: BorderRadius.circular(8)),
-                        child: Image.file(_image!),
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(color: Colors.grey),
+                        ),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: const [
+                            Icon(
+                              Icons.add,
+                            ),
+                            Text('Add product image'),
+                          ],
+                        ),
+                      )
+                    : SizedBox(
+                        child: Stack(
+                          children: [
+                            Image.file(_image!),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                GestureDetector(
+                                  onTap: () {
+                                    _image = null;
+                                    isImageChanged = false;
+                                    setState(() {});
+                                  },
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                        border: Border.all(
+                                            color: Colors.transparent),
+                                        borderRadius: BorderRadius.circular(50),
+                                        color: Colors.grey[300]),
+                                    margin: const EdgeInsets.all(15.0),
+                                    padding: const EdgeInsets.all(5.0),
+                                    child: Align(
+                                      alignment: Alignment.topRight,
+                                      child: Icon(
+                                        Icons.close,
+                                        color: Colors.grey[800],
+                                        size: 20,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
                       ),
               ),
             )
