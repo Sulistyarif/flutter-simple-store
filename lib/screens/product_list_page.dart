@@ -24,6 +24,7 @@ class _ProductListPageState extends State<ProductListPage> {
   bool isLoggedIn = false;
   List<Products> listAllProduct = [];
   List<Products> listFoundProduct = [];
+  bool searchProductList = false;
 
   @override
   void initState() {
@@ -70,29 +71,23 @@ class _ProductListPageState extends State<ProductListPage> {
         padding: const EdgeInsets.all(8.0),
         child: Column(
           children: [
-            /* TextField(
-              controller: controllerSearch,
-              decoration: InputDecoration(
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10.0),
-                ),
-                filled: true,
-                hintStyle: TextStyle(
-                    color: Colors.grey[800], fontStyle: FontStyle.italic),
-                hintText: "Search product",
-                fillColor: Colors.white70,
-                suffixIcon: const Icon(Icons.search),
-              ),
-            ), */
             CupertinoSearchTextField(
               controller: controllerSearch,
               onSubmitted: (value) {
                 // add get product with contain
-                print(value);
+                ClientApi.searchProduct(value);
+                searchProductList = true;
+                if (value == '') {
+                  searchProductList = false;
+                }
+                setState(() {});
               },
               onSuffixTap: () {
                 // when suffix tap, will change to all list data
                 controllerSearch.clear();
+                searchProductList = false;
+                productController.searchProductList.clear();
+                setState(() {});
               },
             ),
             const SizedBox(height: 10),
@@ -108,10 +103,14 @@ class _ProductListPageState extends State<ProductListPage> {
                       Random rnd = Random();
                       return ItemProduct(
                         key: Key(Utils.getRandomString(6, rnd)),
-                        item: productController.allProductList[index],
+                        item: !searchProductList
+                            ? productController.allProductList[index]
+                            : productController.searchProductList[index],
                       );
                     },
-                    itemCount: productController.allProductList.length,
+                    itemCount: !searchProductList
+                        ? productController.allProductList.length
+                        : productController.searchProductList.length,
                   ),
                 );
               },

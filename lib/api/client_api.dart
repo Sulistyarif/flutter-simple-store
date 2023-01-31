@@ -257,4 +257,28 @@ class ClientApi {
       return false;
     }
   }
+
+  static Future<void> searchProduct(String name) async {
+    var response = await client.post(
+      Uri.parse('$uri/searchproduct'),
+      headers: {
+        "content-type": "application/x-www-form-urlencoded",
+      },
+      body: {
+        'name': name,
+      },
+    );
+    var resJson = json.decode(response.body).cast<Map<String, dynamic>>();
+    List<product_class.Products> responseList = [];
+    responseList = resJson != null
+        ? resJson
+            .map<product_class.Products>(
+                (json) => product_class.Products.fromJson(json))
+            .toList()
+        : [];
+    // responseList = search_list_class.Data.fromJson(resJson);
+    productController.searchProductList(responseList);
+    log(response.body);
+    print('== found length: ${responseList.length}');
+  }
 }
