@@ -86,6 +86,14 @@ class _ProductListPageState extends State<ProductListPage> {
             ), */
             CupertinoSearchTextField(
               controller: controllerSearch,
+              onSubmitted: (value) {
+                // add get product with contain
+                print(value);
+              },
+              onSuffixTap: () {
+                // when suffix tap, will change to all list data
+                controllerSearch.clear();
+              },
             ),
             const SizedBox(height: 10),
             Expanded(child: Obx(

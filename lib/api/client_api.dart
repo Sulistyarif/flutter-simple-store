@@ -233,4 +233,28 @@ class ClientApi {
       return false;
     }
   }
+
+  static Future<bool> editProduct(int id, String name, String desc,
+      int categoryId, int sellerId, String price) async {
+    var response = await client.put(
+      Uri.parse('$uri/product/$id'),
+      headers: {
+        "content-type": "application/x-www-form-urlencoded",
+      },
+      body: {
+        'name': name,
+        'description': desc,
+        'category_id': categoryId.toString(),
+        'seller_id': sellerId.toString(),
+        'price': price.toString(),
+      },
+    );
+    Map<String, dynamic> resJson = json.decode(response.body);
+    log(response.body);
+    if (resJson['success']) {
+      return true;
+    } else {
+      return false;
+    }
+  }
 }

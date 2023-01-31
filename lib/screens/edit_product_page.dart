@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:simple_store/controller/category_controller.dart';
+import 'package:simple_store/widget/dialog_yes_no.dart';
 import 'dart:io' as Io;
 import '../api/client_api.dart';
 import '../controller/user_controller.dart';
@@ -11,7 +12,9 @@ import 'pick_category_page.dart';
 
 class EditProductPage extends StatefulWidget {
   final Products item;
-  const EditProductPage({super.key, required this.item});
+  final Function() onAction;
+  const EditProductPage(
+      {super.key, required this.item, required this.onAction});
 
   @override
   State<EditProductPage> createState() => _EditProductPageState();
@@ -44,11 +47,16 @@ class _EditProductPageState extends State<EditProductPage> {
       appBar: AppBar(
         title: Text('Edit product'),
         actions: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 15),
-            child: Icon(
-              Icons.check,
-              color: Colors.white,
+          GestureDetector(
+            onTap: () {
+              _onSave();
+            },
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15),
+              child: Icon(
+                Icons.check,
+                color: Colors.white,
+              ),
             ),
           ),
         ],
@@ -172,6 +180,29 @@ class _EditProductPageState extends State<EditProductPage> {
           itemCategories = item;
           setState(() {});
         },
+      ),
+    );
+  }
+
+  void _onSave() async {
+    Get.dialog(
+      DialogYesNo(
+        onYes: () async {
+          bool res = await ClientApi.editProduct(
+            widget.item.id!,
+            controllerName.text,
+            controllerDesc.text,
+            itemCategories!.id!,
+            userController.user.value.id!,
+            controllerPrice.text,
+          );
+          if (res) {
+            widget.onAction();
+          } else {
+            Get.snackbar('Failed to edit product', 'Check your form');
+          }
+        },
+        title: 'Are you sure to edit this product?',
       ),
     );
   }

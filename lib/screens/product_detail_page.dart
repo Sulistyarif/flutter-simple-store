@@ -154,7 +154,15 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
 
   void _onEditProduct() {
     Get.to(
-      EditProductPage(item: widget.item),
+      EditProductPage(
+        item: widget.item,
+        onAction: () {
+          Get.back();
+          Get.back();
+          ClientApi.getMyProducts();
+          ClientApi.getAllProducts();
+        },
+      ),
     );
   }
 }
