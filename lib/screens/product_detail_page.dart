@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:simple_store/api/client_api.dart';
 import 'package:simple_store/controller/user_controller.dart';
 import 'package:simple_store/models/products.dart';
+import 'package:simple_store/screens/edit_product_page.dart';
 import 'package:simple_store/utlis/utils.dart';
 import 'package:simple_store/widget/custom_rounded_button.dart';
 import 'package:simple_store/widget/dialog_yes_no.dart';
@@ -96,7 +97,9 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                       children: [
                         CustomRoundedButton(
                           warna: Colors.green,
-                          onTap: () {},
+                          onTap: () {
+                            _onEditProduct();
+                          },
                           buttonTitle: 'Edit product',
                         ),
                         CustomRoundedButton(
@@ -147,5 +150,11 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
     Get.back();
     Get.back();
     Get.back();
+  }
+
+  void _onEditProduct() {
+    Get.to(
+      EditProductPage(item: widget.item),
+    );
   }
 }

@@ -40,29 +40,48 @@ class _ItemProductState extends State<ItemProduct> {
           padding: const EdgeInsets.all(15.0),
           child: Row(
             children: [
-              Image.network(
-                '${ClientApi.uri}/${widget.item.image}',
-                height: MediaQuery.of(context).size.width / 7,
-                width: MediaQuery.of(context).size.width / 7,
-                fit: BoxFit.cover,
-                errorBuilder: (context, error, stackTrace) {
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 10),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(
-                          Icons.image_not_supported_outlined,
-                          color: Colors.grey,
+              SizedBox(
+                child: widget.item.image != null
+                    ? Image.network(
+                        '${ClientApi.uri}/${widget.item.image}',
+                        height: MediaQuery.of(context).size.width / 7,
+                        width: MediaQuery.of(context).size.width / 7,
+                        fit: BoxFit.cover,
+                        errorBuilder: (context, error, stackTrace) {
+                          return Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 10),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Icon(
+                                  Icons.image_not_supported_outlined,
+                                  color: Colors.grey,
+                                ),
+                                Text(
+                                  'No pict',
+                                  style: TextStyle(color: Colors.grey),
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                      )
+                    : Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 10),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(
+                              Icons.image_not_supported_outlined,
+                              color: Colors.grey,
+                            ),
+                            Text(
+                              'No pict',
+                              style: TextStyle(color: Colors.grey),
+                            ),
+                          ],
                         ),
-                        Text(
-                          'No pict',
-                          style: TextStyle(color: Colors.grey),
-                        ),
-                      ],
-                    ),
-                  );
-                },
+                      ),
               ),
               const SizedBox(width: 15),
               Expanded(

@@ -200,15 +200,12 @@ class _AddNewProductPageState extends State<AddNewProductPage> {
   }
 
   void _onPickCategory() {
-    Navigator.push(
-      context,
-      CupertinoPageRoute(
-        builder: (context) => PickCategoryPage(
-          onPickCategory: (item) {
-            itemCategories = item;
-            setState(() {});
-          },
-        ),
+    Get.to(
+      PickCategoryPage(
+        onPickCategory: (item) {
+          itemCategories = item;
+          setState(() {});
+        },
       ),
     );
   }

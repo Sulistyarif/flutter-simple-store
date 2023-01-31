@@ -7,4 +7,10 @@ class CategoryController extends GetxController {
   void setCategoryList(List<Categories> param) {
     categoryList(param);
   }
+
+  Categories getCategoriesDetail(String catName) {
+    Categories res =
+        categoryList.firstWhere((element) => element.name == catName);
+    return res;
+  }
 }
