@@ -36,7 +36,7 @@ class _MainMenuPageState extends State<MainMenuPage> {
           });
         },
       ),
-      body: _content(),
+      body: Center(child: _content()),
     );
   }
 

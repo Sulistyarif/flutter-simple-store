@@ -7,6 +7,7 @@ import 'package:simple_store/controller/category_controller.dart';
 import 'package:simple_store/controller/product_controller.dart';
 import 'package:simple_store/controller/user_controller.dart';
 import 'package:simple_store/screens/main_menu_page.dart';
+import 'package:upgrader/upgrader.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -40,8 +41,10 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: MainMenuPage(),
+    return MaterialApp(
+      home: UpgradeAlert(
+        child: MainMenuPage(),
+      ),
       debugShowCheckedModeBanner: false,
     );
   }
