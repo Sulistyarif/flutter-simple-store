@@ -1,3 +1,4 @@
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -20,11 +21,12 @@ class _UserProductPageState extends State<UserProductPage> {
   final userController = Get.find<UserController>();
   final productController = Get.find<ProductController>();
 
-  /* @override
+  @override
   void initState() {
-    _loadData();
+    FirebaseAnalytics.instance
+        .setCurrentScreen(screenName: 'user_product_list_page');
     super.initState();
-  } */
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -43,33 +45,6 @@ class _UserProductPageState extends State<UserProductPage> {
                 child: const Icon(Icons.add),
               )
             : null,
-        /* appBar: AppBar(
-        title: const Text('My Product'),
-        actions: [
-          GestureDetector(
-            onTap: () {
-              Navigator.push(
-                context,
-                CupertinoPageRoute(
-                  builder: (context) => AddNewProductPage(
-                    onProductAdded: () {
-                      _loadData();
-                    },
-                  ),
-                ),
-              );
-            },
-            child: const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 15),
-              child: Icon(
-                Icons.add,
-                color: Colors.white,
-                size: 30,
-              ),
-            ),
-          ),
-        ],
-      ), */
         body: Obx(
           () {
             return userController.isLoggedIn.value
@@ -77,7 +52,26 @@ class _UserProductPageState extends State<UserProductPage> {
                     padding: const EdgeInsets.all(8.0),
                     child: Column(
                       children: [
-                        CupertinoSearchTextField(controller: controllerSearch),
+                        // CupertinoSearchTextField(controller: controllerSearch),
+                        Container(
+                          padding: const EdgeInsets.all(12.0),
+                          decoration: BoxDecoration(
+                            color: Colors.teal[100],
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: Row(
+                            children: [
+                              Text('You`ve been sell'),
+                              Expanded(
+                                child: Text(
+                                  '${productController.myProductList.length} product(s)',
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                  textAlign: TextAlign.right,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
                         const SizedBox(height: 10),
                         Expanded(
                           child: productController.myProductList.isNotEmpty
@@ -86,6 +80,9 @@ class _UserProductPageState extends State<UserProductPage> {
                                     _loadData();
                                   },
                                   child: ListView.builder(
+                                    physics: const BouncingScrollPhysics(
+                                        parent:
+                                            AlwaysScrollableScrollPhysics()),
                                     itemBuilder: (context, index) {
                                       return ItemProduct(
                                         item: productController

@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -28,6 +29,8 @@ class _ProductListPageState extends State<ProductListPage> {
 
   @override
   void initState() {
+    FirebaseAnalytics.instance
+        .setCurrentScreen(screenName: 'all_product_list_page');
     _loadData();
     super.initState();
   }
@@ -35,38 +38,6 @@ class _ProductListPageState extends State<ProductListPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      /* appBar: AppBar(
-        title: const Text('Simple Store'),
-        actions: [
-          GestureDetector(
-            onTap: () {
-              if (isLoggedIn) {
-                Navigator.push(
-                  context,
-                  CupertinoPageRoute(
-                    builder: (context) => const ProfileMenuPage(),
-                  ),
-                );
-              } else {
-                Navigator.push(
-                  context,
-                  CupertinoPageRoute(
-                    builder: (context) => const LoginPage(),
-                  ),
-                );
-              }
-            },
-            child: const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 15),
-              child: Icon(
-                Icons.person,
-                color: Colors.white,
-                size: 30,
-              ),
-            ),
-          ),
-        ],
-      ), */
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(
@@ -99,6 +70,8 @@ class _ProductListPageState extends State<ProductListPage> {
                     _loadData();
                   },
                   child: ListView.builder(
+                    physics: const BouncingScrollPhysics(
+                        parent: AlwaysScrollableScrollPhysics()),
                     itemBuilder: (context, index) {
                       Random rnd = Random();
                       return ItemProduct(

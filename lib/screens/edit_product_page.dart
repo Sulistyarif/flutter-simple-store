@@ -1,3 +1,4 @@
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
@@ -33,6 +34,8 @@ class _EditProductPageState extends State<EditProductPage> {
 
   @override
   void initState() {
+    FirebaseAnalytics.instance
+        .setCurrentScreen(screenName: 'edit_product_page');
     controllerName.text = widget.item.name!;
     controllerDesc.text = widget.item.description!;
     controllerPrice.text = widget.item.price!.toString();

@@ -1,4 +1,4 @@
-import 'package:flutter/cupertino.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
@@ -6,6 +6,7 @@ import 'package:simple_store/api/client_api.dart';
 import 'package:simple_store/controller/user_controller.dart';
 import 'package:simple_store/models/categories.dart';
 import 'package:simple_store/screens/pick_category_page.dart';
+import 'package:simple_store/utlis/utils.dart';
 import 'package:simple_store/widget/dialog_yes_no.dart';
 import 'dart:io' as Io;
 
@@ -26,6 +27,12 @@ class _AddNewProductPageState extends State<AddNewProductPage> {
   Io.File? _image;
   final _picker = ImagePicker();
   final userController = Get.find<UserController>();
+
+  @override
+  void initState() {
+    FirebaseAnalytics.instance.setCurrentScreen(screenName: 'new_product_page');
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -235,27 +242,34 @@ class _AddNewProductPageState extends State<AddNewProductPage> {
   }
 
   void _onProductAdd2() async {
-    Get.dialog(
-      DialogYesNo(
-          onYes: () async {
-            bool isSuccess = await ClientApi.createProductWImage(
-              controllerName.text,
-              controllerDesc.text,
-              itemCategories!.id!,
-              userController.user.value.id!,
-              controllerPrice.text,
-              _image!.path,
-            );
-            if (isSuccess) {
-              widget.onProductAdded();
-              Get.back();
-              Get.back();
-            } else {
-              Get.snackbar('Simple Store', 'Failed to create product');
-            }
-          },
-          title: 'Are you want to add this product?'),
-    );
+    if (controllerName.text.isEmpty ||
+        controllerDesc.text.isEmpty ||
+        itemCategories == null ||
+        controllerPrice.text.isEmpty) {
+      Get.snackbar('Warning', 'Name, desc, category, price can`t be null');
+    } else {
+      Get.dialog(
+        DialogYesNo(
+            onYes: () async {
+              bool isSuccess = await ClientApi.createProductWImage(
+                controllerName.text,
+                controllerDesc.text,
+                itemCategories!.id!,
+                userController.user.value.id!,
+                controllerPrice.text,
+                _image!.path,
+              );
+              if (isSuccess) {
+                widget.onProductAdded();
+                Get.back();
+                Get.back();
+              } else {
+                Get.snackbar('Simple Store', 'Failed to create product');
+              }
+            },
+            title: 'Are you want to add this product?'),
+      );
+    }
   }
 
   void _showImagePicker(context) {

@@ -1,3 +1,4 @@
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:simple_store/screens/product_list_page.dart';
 import 'package:simple_store/screens/profile_page.dart';
@@ -17,6 +18,7 @@ class _MainMenuPageState extends State<MainMenuPage> {
 
   @override
   void initState() {
+    FirebaseAnalytics.instance.setCurrentScreen(screenName: 'main_menu_page');
     _loadData();
     super.initState();
   }
@@ -25,7 +27,23 @@ class _MainMenuPageState extends State<MainMenuPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Simple Store'),
+        title: Row(
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.circular(4),
+              child: Image.asset(
+                'assets/images/logo_app.png',
+                height: MediaQuery.of(context).size.width / 15,
+                width: MediaQuery.of(context).size.width / 15,
+              ),
+            ),
+            SizedBox(width: MediaQuery.of(context).size.width / 30),
+            const Text(
+              'Simple Store',
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+          ],
+        ),
       ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: currentIndex,

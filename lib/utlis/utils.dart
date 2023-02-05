@@ -1,3 +1,4 @@
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 
 class Utils {
@@ -27,4 +28,14 @@ class Utils {
   static String getRandomString(int length, rnd) =>
       String.fromCharCodes(Iterable.generate(
           length, (_) => _chars.codeUnitAt(rnd.nextInt(_chars.length))));
+
+  static void trackScreen(String screenName, String screenClass) async {
+    await FirebaseAnalytics.instance.logEvent(
+      name: 'screen_view',
+      parameters: {
+        'firebasescreen': screenName,
+        'firebasescreenclass': screenClass,
+      },
+    );
+  }
 }
