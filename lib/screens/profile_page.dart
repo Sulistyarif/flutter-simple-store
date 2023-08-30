@@ -1,6 +1,7 @@
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 import '../controller/user_controller.dart';
 
@@ -13,10 +14,12 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
   final userController = Get.find<UserController>();
+  String version = '1.0.0+1';
 
   @override
   void initState() {
     FirebaseAnalytics.instance.setCurrentScreen(screenName: 'profile_page');
+    _setVersion();
     super.initState();
   }
 
@@ -26,10 +29,28 @@ class _ProfilePageState extends State<ProfilePage> {
       backgroundColor: Colors.grey[200],
       body: Obx(
         () {
-          return SizedBox(
-            child: userController.isLoggedIn.value
-                ? contentLoggedIn()
-                : contentLoggedOut(),
+          return Stack(
+            children: [
+              SizedBox(
+                child: userController.isLoggedIn.value
+                    ? contentLoggedIn()
+                    : contentLoggedOut(),
+              ),
+              Align(
+                alignment: Alignment.bottomCenter,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 5),
+                  child: Text(
+                    'V.$version',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: Colors.grey,
+                      fontSize: 12,
+                    ),
+                  ),
+                ),
+              )
+            ],
           );
         },
       ),
@@ -133,5 +154,12 @@ class _ProfilePageState extends State<ProfilePage> {
         ),
       ],
     );
+  }
+
+  void _setVersion() async {
+    PackageInfo packageInfo = await PackageInfo.fromPlatform();
+    setState(() {
+      version = '${packageInfo.version}+${packageInfo.buildNumber}';
+    });
   }
 }
