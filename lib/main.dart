@@ -9,6 +9,7 @@ import 'package:simple_store/controller/category_controller.dart';
 import 'package:simple_store/controller/product_controller.dart';
 import 'package:simple_store/controller/user_controller.dart';
 import 'package:simple_store/screens/main_menu_page.dart';
+import 'package:simple_store/screens/splash_screen.dart';
 import 'package:upgrader/upgrader.dart';
 
 void main() async {
@@ -53,6 +54,7 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       home: UpgradeAlert(
         child: MainMenuPage(),
+        // child: SplashScreen(),
       ),
       theme: ThemeData(
         primarySwatch: Colors.blue,
