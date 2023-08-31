@@ -1,6 +1,7 @@
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -9,7 +10,6 @@ import 'package:simple_store/controller/category_controller.dart';
 import 'package:simple_store/controller/product_controller.dart';
 import 'package:simple_store/controller/user_controller.dart';
 import 'package:simple_store/screens/main_menu_page.dart';
-import 'package:simple_store/screens/splash_screen.dart';
 import 'package:upgrader/upgrader.dart';
 
 void main() async {
@@ -54,12 +54,18 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       home: UpgradeAlert(
         child: MainMenuPage(),
-        // child: SplashScreen(),
       ),
       theme: ThemeData(
         primarySwatch: Colors.blue,
         textTheme: GoogleFonts.latoTextTheme(
           Theme.of(context).textTheme,
+        ),
+        appBarTheme: AppBarTheme(
+          systemOverlayStyle: SystemUiOverlayStyle(
+            statusBarIconBrightness: Brightness.dark,
+            statusBarBrightness: Brightness.light,
+            statusBarColor: Colors.transparent,
+          ),
         ),
       ),
       debugShowCheckedModeBanner: false,

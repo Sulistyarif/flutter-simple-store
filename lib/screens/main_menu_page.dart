@@ -26,7 +26,7 @@ class _MainMenuPageState extends State<MainMenuPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
+      /* appBar: AppBar(
         title: Row(
           children: [
             ClipRRect(
@@ -44,7 +44,7 @@ class _MainMenuPageState extends State<MainMenuPage> {
             ),
           ],
         ),
-      ),
+      ), */
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: currentIndex,
         items: menuPageList,
@@ -54,7 +54,7 @@ class _MainMenuPageState extends State<MainMenuPage> {
           });
         },
       ),
-      body: Center(child: _content()),
+      body: SafeArea(child: _content()),
     );
   }
 

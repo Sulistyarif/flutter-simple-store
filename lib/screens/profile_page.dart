@@ -2,6 +2,7 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:simple_store/screens/login_page.dart';
 
 import '../controller/user_controller.dart';
 
@@ -32,10 +33,10 @@ class _ProfilePageState extends State<ProfilePage> {
           return Stack(
             children: [
               SizedBox(
-                child: userController.isLoggedIn.value
-                    ? contentLoggedIn()
-                    : contentLoggedOut(),
-              ),
+                  child: userController.isLoggedIn.value
+                      ? contentLoggedIn()
+                      // : contentLoggedOut(),
+                      : contentLoggedOutGeneral()),
               Align(
                 alignment: Alignment.bottomCenter,
                 child: Padding(
@@ -67,7 +68,6 @@ class _ProfilePageState extends State<ProfilePage> {
           shape: StadiumBorder(),
           backgroundColor: Colors.white,
         ),
-        // style: ElevatedButton.styleFrom(backgroundColor: Colors.white),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -153,6 +153,27 @@ class _ProfilePageState extends State<ProfilePage> {
           ),
         ),
       ],
+    );
+  }
+
+  Widget contentLoggedOutGeneral() {
+    return Center(
+      child: ElevatedButton(
+        style: OutlinedButton.styleFrom(
+          shape: StadiumBorder(),
+          backgroundColor: Colors.white,
+        ),
+        onPressed: () {
+          Get.to(() => const LoginPage());
+        },
+        child: Text(
+          'Tap to Login',
+          style: TextStyle(
+            color: Colors.grey[800],
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ),
     );
   }
 
