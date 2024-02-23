@@ -13,7 +13,8 @@ import 'package:simple_store/models/users.dart' as user_class;
 import '../controller/product_controller.dart';
 
 class ClientApi {
-  static final Uri uri = Uri.parse('http://api.zakia-dev.my.id');
+  // static final Uri uri = Uri.parse('http://api.zakia-dev.my.id');
+  static final Uri uri = Uri.parse('https://api.sulistyarif.my.id');
   // static final Uri uri = Uri.parse('http://192.168.18.6:5004');
   static final client = http.Client();
   static final productController = Get.find<ProductController>();
